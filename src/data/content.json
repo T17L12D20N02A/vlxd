@@ -1,0 +1,1850 @@
+{
+  "products": [
+    {
+      "slug": "vai-chiu-nhiet-cao-cap",
+      "name": "Vải chịu nhiệt cao cấp",
+      "category": "vai",
+      "categoryLabel": "Vải Teflon chịu nhiệt",
+      "englishName": "",
+      "lead": "Teflon phủ sợi thủy tinh, bề mặt trơn láng màu nâu. Lớp chống dính và ngăn cách cho quy trình gia nhiệt, ép nhiệt, sấy.",
+      "miniSpecs": [
+        {
+          "value": "-73 → 260°C",
+          "label": "Nhiệt độ làm việc"
+        },
+        {
+          "value": "0.08-0.35 mm",
+          "label": "Độ dày"
+        },
+        {
+          "value": "1 m / 1.2 m",
+          "label": "Khổ chuẩn"
+        },
+        {
+          "value": "Nâu",
+          "label": "Màu sắc"
+        }
+      ],
+      "images": [
+        "/images/products/vai-chiu-nhiet-cao-cap.webp"
+      ],
+      "description": [
+        "Vải chịu nhiệt PTFE (Teflon) được sản xuất từ nền sợi thủy tinh phủ PTFE (Polytetrafluoroethylene), kết hợp độ bền cơ học của sợi thủy tinh với đặc tính chống dính, chịu nhiệt và ma sát thấp của lớp phủ PTFE.",
+        "Sản phẩm có bề mặt nhẵn, màu nâu đặc trưng, phù hợp làm lớp chống dính, lớp ngăn cách và vật liệu hỗ trợ trong các quy trình gia nhiệt, ép nhiệt, sấy và gia công công nghiệp."
+      ],
+      "specs": [
+        {
+          "label": "Chất liệu",
+          "value": "Teflon phủ sợi thủy tinh"
+        },
+        {
+          "label": "Độ dày",
+          "value": "0.08 mm, 0.13 mm, 0.18 mm, 0.25 mm, 0.35 mm"
+        },
+        {
+          "label": "Khổ chuẩn",
+          "value": "1 m, 1.2 m"
+        },
+        {
+          "label": "Nhiệt độ làm việc",
+          "value": "-73°C đến 260°C"
+        },
+        {
+          "label": "Đặc điểm",
+          "value": "Bề mặt trơn láng, màu nâu"
+        }
+      ],
+      "applications": [
+        "Lớp chống dính trong thiết bị gia nhiệt",
+        "Lớp ngăn cách khi ép nhiệt",
+        "Vật liệu hỗ trợ trong quy trình sấy và gia công công nghiệp"
+      ],
+      "featured": true
+    },
+    {
+      "slug": "vai-chiu-nhiet-cong-nghiep",
+      "name": "Vải chịu nhiệt công nghiệp",
+      "category": "vai",
+      "categoryLabel": "Vải Teflon chịu nhiệt",
+      "englishName": "PTFE Fabric Industrial",
+      "lead": "PTFE Fabric Industrial - bề mặt nhám có vân, màu trắng, phù hợp vị trí cần độ bám tiếp xúc trong môi trường sản xuất.",
+      "miniSpecs": [
+        {
+          "value": "-73 → 260°C",
+          "label": "Nhiệt độ làm việc"
+        },
+        {
+          "value": "0.12-0.18 mm",
+          "label": "Độ dày"
+        },
+        {
+          "value": "1 m",
+          "label": "Khổ chuẩn"
+        },
+        {
+          "value": "Trắng",
+          "label": "Màu sắc"
+        }
+      ],
+      "images": [
+        "/images/products/vai-chiu-nhiet-cong-nghiep.webp"
+      ],
+      "description": [
+        "Vải chịu nhiệt công nghiệp PTFE (Teflon) là vật liệu kỹ thuật cấu tạo từ nền sợi thủy tinh phủ lớp PTFE, kết hợp độ bền cơ học của sợi thủy tinh với khả năng chịu nhiệt, chống dính và kháng hóa chất của lớp phủ PTFE.",
+        "Sản phẩm có bề mặt nhám với các đường vân đặc trưng, màu trắng, phù hợp những vị trí cần độ bám tiếp xúc hoặc yêu cầu kỹ thuật khác với dòng vải PTFE bề mặt trơn. Vải được dùng làm lớp phủ, lớp ngăn cách và vật liệu hỗ trợ trong thiết bị gia nhiệt, ép nhiệt, sấy và nhiều quy trình gia công công nghiệp."
+      ],
+      "specs": [
+        {
+          "label": "Tên tiếng Anh",
+          "value": "PTFE Fabric Industrial"
+        },
+        {
+          "label": "Chất liệu",
+          "value": "PTFE phủ sợi thủy tinh"
+        },
+        {
+          "label": "Độ dày",
+          "value": "0.12 mm, 0.15 mm, 0.18 mm"
+        },
+        {
+          "label": "Khổ chuẩn",
+          "value": "1 m"
+        },
+        {
+          "label": "Nhiệt độ làm việc",
+          "value": "-73°C đến +260°C"
+        },
+        {
+          "label": "Màu sắc",
+          "value": "Trắng"
+        },
+        {
+          "label": "Đặc điểm",
+          "value": "Bề mặt nhám, có vân"
+        }
+      ],
+      "applications": [
+        "Lớp phủ và lớp ngăn cách trong thiết bị gia nhiệt",
+        "Vị trí cần độ bám tiếp xúc",
+        "Ép nhiệt, sấy và gia công công nghiệp"
+      ],
+      "featured": true
+    },
+    {
+      "slug": "vai-chiu-nhiet-025-035",
+      "name": "Vải chịu nhiệt cao cấp (0.25 mm & 0.35 mm)",
+      "category": "vai",
+      "categoryLabel": "Vải Teflon chịu nhiệt",
+      "englishName": "",
+      "lead": "Kết cấu dày, chắc chắn - dùng che chắn, lót bề mặt, bảo vệ thiết bị và ngăn cách vật liệu.",
+      "miniSpecs": [
+        {
+          "value": "-73 → 260°C",
+          "label": "Nhiệt độ tham khảo"
+        },
+        {
+          "value": "0.25 / 0.35 mm",
+          "label": "Độ dày"
+        },
+        {
+          "value": "1 m / 1.2 m",
+          "label": "Khổ chuẩn"
+        },
+        {
+          "value": "Nâu · Đen",
+          "label": "Màu sắc"
+        }
+      ],
+      "images": [
+        "/images/products/vai-chiu-nhiet-025-035.webp"
+      ],
+      "description": [
+        "Vải chịu nhiệt PTFE (Teflon) độ dày 0.25 mm và 0.35 mm được cấu tạo từ nền sợi thủy tinh phủ PTFE, kết hợp khả năng chịu nhiệt, chống dính, kháng hóa chất của lớp phủ PTFE với độ bền cơ học của sợi thủy tinh.",
+        "Với kết cấu dày và chắc chắn hơn các dòng vải PTFE mỏng, sản phẩm phù hợp cho những ứng dụng cần che chắn, lót bề mặt, bảo vệ thiết bị và ngăn cách vật liệu trong môi trường sản xuất công nghiệp."
+      ],
+      "specs": [
+        {
+          "label": "Chất liệu",
+          "value": "PTFE phủ sợi thủy tinh"
+        },
+        {
+          "label": "Độ dày",
+          "value": "0.25 mm và 0.35 mm"
+        },
+        {
+          "label": "Khổ chuẩn",
+          "value": "1 m và 1.2 m"
+        },
+        {
+          "label": "Màu sắc",
+          "value": "Nâu, đen"
+        },
+        {
+          "label": "Nhiệt độ làm việc tham khảo",
+          "value": "-73°C đến +260°C"
+        },
+        {
+          "label": "Bề mặt",
+          "value": "Trơn láng, chống dính"
+        }
+      ],
+      "applications": [
+        "Che chắn và lót bề mặt",
+        "Bảo vệ thiết bị",
+        "Ngăn cách vật liệu trong sản xuất công nghiệp"
+      ],
+      "featured": false
+    },
+    {
+      "slug": "tam-chong-dinh-chiu-nhiet",
+      "name": "Tấm chống dính chịu nhiệt",
+      "category": "vai",
+      "categoryLabel": "Vải Teflon chịu nhiệt",
+      "englishName": "PTFE Coated Fiberglass Sheet",
+      "lead": "PTFE Coated Fiberglass Sheet - dùng trong ép nhiệt, chế biến thực phẩm, in chuyển nhiệt. Có phiên bản đen chống tĩnh điện.",
+      "miniSpecs": [
+        {
+          "value": "-73 → 260°C",
+          "label": "Nhiệt độ làm việc"
+        },
+        {
+          "value": "40×60 cm",
+          "label": "Kích thước thông dụng"
+        },
+        {
+          "value": "50×70 cm",
+          "label": "Kích thước thông dụng"
+        },
+        {
+          "value": "Nâu",
+          "label": "Màu sắc"
+        }
+      ],
+      "images": [
+        "/images/products/tam-chong-dinh-chiu-nhiet.webp"
+      ],
+      "description": [
+        "Tấm chống dính chịu nhiệt Teflon (PTFE) phủ sợi thủy tinh là vật liệu kỹ thuật cấu tạo từ lớp nền sợi thủy tinh gia cường, phủ PTFE trên bề mặt, kết hợp độ bền cơ học với đặc tính chống dính, chịu nhiệt và hệ số ma sát thấp.",
+        "Bề mặt trơn nhẵn, hạn chế bám dính và dễ vệ sinh, sản phẩm được dùng phổ biến trong các công đoạn gia nhiệt, ép nhiệt, chế biến thực phẩm và in chuyển nhiệt. Ngoài phiên bản thông thường còn có phiên bản màu đen chứa thành phần carbon, hỗ trợ phân tán điện tích và hạn chế tích tụ tĩnh điện."
+      ],
+      "specs": [
+        {
+          "label": "Tên tiếng Anh",
+          "value": "PTFE Coated Fiberglass Sheet"
+        },
+        {
+          "label": "Cấu tạo",
+          "value": "Sợi thủy tinh phủ PTFE (Teflon)"
+        },
+        {
+          "label": "Nhiệt độ làm việc",
+          "value": "-73°C đến 260°C"
+        },
+        {
+          "label": "Màu sắc",
+          "value": "Nâu (có phiên bản đen carbon chống tĩnh điện)"
+        },
+        {
+          "label": "Bề mặt",
+          "value": "Trơn nhẵn, chống dính"
+        },
+        {
+          "label": "Kích thước thông dụng",
+          "value": "40 cm x 60 cm, 50 cm x 70 cm… và theo yêu cầu"
+        }
+      ],
+      "applications": [
+        "Ép nhiệt và in chuyển nhiệt",
+        "Chế biến thực phẩm",
+        "Các công đoạn gia nhiệt cần chống dính"
+      ],
+      "featured": true
+    },
+    {
+      "slug": "bang-keo-chiu-nhiet-13-80mm",
+      "name": "Băng keo chịu nhiệt (khổ 13 mm - 80 mm)",
+      "category": "bangkeo",
+      "categoryLabel": "Băng keo chịu nhiệt",
+      "englishName": "PTFE Adhesive Tape",
+      "lead": "Vải sợi thủy tinh phủ PTFE, keo silicone chịu nhiệt. Phủ thanh hàn nhiệt, thanh ép, bộ phận gia nhiệt.",
+      "miniSpecs": [
+        {
+          "value": "-73 → 260°C",
+          "label": "Nhiệt độ làm việc"
+        },
+        {
+          "value": "13-80 mm",
+          "label": "Khổ rộng"
+        },
+        {
+          "value": "10 m",
+          "label": "Chiều dài cuộn"
+        },
+        {
+          "value": "Nâu",
+          "label": "Màu sắc"
+        }
+      ],
+      "images": [
+        "/images/products/bang-keo-chiu-nhiet-13-80mm.webp"
+      ],
+      "description": [
+        "Băng keo Teflon chịu nhiệt là vật liệu kỹ thuật gồm lớp vải sợi thủy tinh phủ PTFE và lớp keo silicone chịu nhiệt ở mặt sau, kết hợp độ bền của nền sợi thủy tinh, đặc tính bề mặt của PTFE và khả năng bám dính của keo silicone.",
+        "Băng keo thường được dùng để phủ thanh hàn nhiệt, thanh ép, bộ phận gia nhiệt và các bề mặt tiếp xúc với nhựa hoặc keo nóng, giúp hạn chế vật liệu bám lên thiết bị trong quá trình vận hành."
+      ],
+      "specs": [
+        {
+          "label": "Tên tiếng Anh",
+          "value": "PTFE Adhesive Tape"
+        },
+        {
+          "label": "Vật liệu nền",
+          "value": "Sợi thủy tinh phủ PTFE"
+        },
+        {
+          "label": "Lớp keo",
+          "value": "Silicone chịu nhiệt"
+        },
+        {
+          "label": "Độ dày",
+          "value": "0.13 mm, 0.18 mm, 0.3 mm"
+        },
+        {
+          "label": "Nhiệt độ làm việc",
+          "value": "-73°C đến 260°C"
+        },
+        {
+          "label": "Kích thước",
+          "value": "13, 19, 25, 30, 40, 50, 60, 80 mm × 10 m"
+        },
+        {
+          "label": "Màu sắc",
+          "value": "Nâu"
+        },
+        {
+          "label": "Hình thức cung cấp",
+          "value": "Dạng cuộn"
+        }
+      ],
+      "applications": [
+        "Phủ thanh hàn nhiệt, thanh ép",
+        "Bọc bộ phận gia nhiệt",
+        "Bề mặt tiếp xúc với nhựa hoặc keo nóng"
+      ],
+      "featured": true
+    },
+    {
+      "slug": "bang-keo-chiu-nhiet-tu-100mm",
+      "name": "Băng keo chịu nhiệt (khổ từ 100 mm)",
+      "category": "bangkeo",
+      "categoryLabel": "Băng keo chịu nhiệt",
+      "englishName": "",
+      "lead": "Khổ rộng cho bề mặt lớn, dạng cuộn, lớp keo silicone bám chắc, hạn chế vật liệu bám lên thiết bị.",
+      "miniSpecs": [
+        {
+          "value": "-73 → 260°C",
+          "label": "Nhiệt độ làm việc"
+        },
+        {
+          "value": "100-300 mm",
+          "label": "Khổ rộng"
+        },
+        {
+          "value": "10 m",
+          "label": "Chiều dài cuộn"
+        },
+        {
+          "value": "Nâu",
+          "label": "Màu sắc"
+        }
+      ],
+      "images": [
+        "/images/products/bang-keo-chiu-nhiet-tu-100mm.webp"
+      ],
+      "description": [
+        "Băng keo Teflon chịu nhiệt khổ rộng từ 100 mm gồm lớp vải sợi thủy tinh phủ PTFE và lớp keo silicone chịu nhiệt ở mặt sau, phù hợp nhiều vị trí cần cách ly bề mặt trong thiết bị gia nhiệt công nghiệp.",
+        "Khổ rộng giúp phủ nhanh các bề mặt lớn, hạn chế vật liệu bám lên thiết bị trong quá trình vận hành."
+      ],
+      "specs": [
+        {
+          "label": "Vật liệu nền",
+          "value": "Sợi thủy tinh phủ PTFE"
+        },
+        {
+          "label": "Lớp keo",
+          "value": "Silicone chịu nhiệt"
+        },
+        {
+          "label": "Độ dày",
+          "value": "0.13 mm, 0.18 mm, 0.3 mm"
+        },
+        {
+          "label": "Nhiệt độ làm việc",
+          "value": "-73°C đến 260°C"
+        },
+        {
+          "label": "Kích thước",
+          "value": "100 mm × 10 m - 300 mm × 10 m"
+        },
+        {
+          "label": "Màu sắc",
+          "value": "Nâu"
+        },
+        {
+          "label": "Hình thức cung cấp",
+          "value": "Dạng cuộn"
+        }
+      ],
+      "applications": [
+        "Phủ bề mặt thiết bị gia nhiệt diện tích lớn",
+        "Cách ly bề mặt tiếp xúc với nhựa hoặc keo nóng"
+      ],
+      "featured": false
+    },
+    {
+      "slug": "bang-keo-chiu-nhiet-dang-tam",
+      "name": "Băng keo chịu nhiệt dạng tấm (Vải Teflon có keo)",
+      "category": "bangkeo",
+      "categoryLabel": "Băng keo chịu nhiệt",
+      "englishName": "PTFE Adhesive Fiberglass Fabric",
+      "lead": "Vải Teflon một mặt có keo silicone - dán phủ khuôn ép, bàn gia nhiệt, trục rulo diện tích lớn.",
+      "miniSpecs": [
+        {
+          "value": "-73 → 260°C",
+          "label": "Nhiệt độ làm việc"
+        },
+        {
+          "value": "0.18 / 0.30 mm",
+          "label": "Độ dày"
+        },
+        {
+          "value": "1 m",
+          "label": "Khổ rộng chuẩn"
+        },
+        {
+          "value": "m²",
+          "label": "Đơn vị tính"
+        }
+      ],
+      "images": [
+        "/images/products/bang-keo-chiu-nhiet-dang-tam.webp"
+      ],
+      "description": [
+        "Băng keo chịu nhiệt dạng tấm, còn gọi là vải chịu nhiệt Teflon phủ keo, được cấu tạo từ nền sợi thủy tinh gia cường, phủ lớp PTFE trên bề mặt và một mặt có keo silicone chịu nhiệt.",
+        "Lớp keo silicone giúp vật liệu dễ dàng dán phủ, cố định trên bề mặt thiết bị, khuôn ép, bàn gia nhiệt và trục rulo. Với khổ rộng tiêu chuẩn 1 m, sản phẩm phù hợp phủ bề mặt diện tích lớn, làm lớp lót chống dính, bảo vệ thiết bị và gia công theo kích thước yêu cầu."
+      ],
+      "specs": [
+        {
+          "label": "Tên tiếng Anh",
+          "value": "PTFE Adhesive Fiberglass Fabric"
+        },
+        {
+          "label": "Cấu tạo",
+          "value": "Sợi thủy tinh phủ PTFE, một mặt có keo silicone chịu nhiệt"
+        },
+        {
+          "label": "Độ dày",
+          "value": "0.18 mm và 0.30 mm"
+        },
+        {
+          "label": "Khổ rộng tiêu chuẩn",
+          "value": "1 m"
+        },
+        {
+          "label": "Nhiệt độ làm việc",
+          "value": "-73°C đến 260°C"
+        },
+        {
+          "label": "Màu sắc",
+          "value": "Nâu"
+        },
+        {
+          "label": "Bề mặt",
+          "value": "Trơn nhẵn, chống dính"
+        },
+        {
+          "label": "Đơn vị tính",
+          "value": "m²"
+        }
+      ],
+      "applications": [
+        "Dán phủ khuôn ép, bàn gia nhiệt",
+        "Bọc trục rulo",
+        "Lớp lót chống dính cho bề mặt lớn"
+      ],
+      "featured": false
+    },
+    {
+      "slug": "bang-tai-may-ep-keo-duc-lien",
+      "name": "Băng tải máy ép keo đúc liền",
+      "category": "epkeo",
+      "categoryLabel": "Băng tải máy ép keo",
+      "englishName": "Seamless PTFE Fusing Machine Belt",
+      "lead": "Vòng băng liên tục không mối nối, chống dính, vận hành ổn định cho máy ép keo ngành may mặc, giày dép.",
+      "miniSpecs": [
+        {
+          "value": "0.45-0.50 mm",
+          "label": "Độ dày"
+        },
+        {
+          "value": "200-1800 mm",
+          "label": "Chiều rộng"
+        },
+        {
+          "value": "Đúc liền",
+          "label": "Không mối nối"
+        },
+        {
+          "value": "Đen",
+          "label": "Màu sắc"
+        }
+      ],
+      "images": [
+        "/images/products/bang-tai-may-ep-keo-duc-lien.webp"
+      ],
+      "description": [
+        "Băng tải máy ép keo PTFE đúc liền được sản xuất từ sợi thủy tinh gia cường phủ PTFE (Teflon), tạo thành vòng băng liên tục, không có đường nối ghép. Bề mặt trơn nhẵn, chống dính, chịu nhiệt và hệ số ma sát thấp, phù hợp vận hành liên tục của máy ép keo công nghiệp.",
+        "Sản phẩm dùng phổ biến trong máy ép keo ngành may mặc, giày dép và các dây chuyền ép dán vật liệu, vận chuyển vải, keo dựng qua vùng gia nhiệt và ép. Tùy cấu tạo và phiên bản, băng tải có thể bổ sung carbon để hỗ trợ chống tĩnh điện."
+      ],
+      "specs": [
+        {
+          "label": "Tên tiếng Anh",
+          "value": "Seamless PTFE Fusing Machine Belt"
+        },
+        {
+          "label": "Vật liệu",
+          "value": "Sợi thủy tinh phủ PTFE (Teflon)"
+        },
+        {
+          "label": "Cấu tạo",
+          "value": "Vòng băng đúc liền, không mối nối ghép"
+        },
+        {
+          "label": "Bề mặt",
+          "value": "Trơn nhẵn, chống dính"
+        },
+        {
+          "label": "Độ dày",
+          "value": "Khoảng 0.45 mm - 0.50 mm"
+        },
+        {
+          "label": "Chiều rộng",
+          "value": "200 mm - 1800 mm"
+        },
+        {
+          "label": "Chiều dài vòng băng",
+          "value": "Theo thông số băng trên và băng dưới của từng model"
+        },
+        {
+          "label": "Màu sắc",
+          "value": "Đen"
+        }
+      ],
+      "applications": [
+        "Máy ép keo ngành may mặc",
+        "Máy ép keo ngành giày dép",
+        "Dây chuyền ép dán vật liệu"
+      ],
+      "featured": true
+    },
+    {
+      "slug": "bang-tai-may-ep-keo-moi-noi",
+      "name": "Băng tải máy ép keo có mối nối",
+      "category": "epkeo",
+      "categoryLabel": "Băng tải máy ép keo",
+      "englishName": "Jointed PTFE Fusing Machine Belt",
+      "lead": "Jointed PTFE Fusing Machine Belt - gia công theo kích thước băng trên/dưới của từng model, thuận tiện thay thế, bảo trì.",
+      "miniSpecs": [
+        {
+          "value": "200-1800 mm",
+          "label": "Chiều rộng"
+        },
+        {
+          "value": "Có mối nối",
+          "label": "Cấu tạo"
+        },
+        {
+          "value": "Theo model",
+          "label": "Chiều dài vòng băng"
+        },
+        {
+          "value": "Đen",
+          "label": "Màu sắc"
+        }
+      ],
+      "images": [
+        "/images/products/bang-tai-may-ep-keo-moi-noi.webp"
+      ],
+      "description": [
+        "Băng tải máy ép keo PTFE có mối nối được sản xuất từ sợi thủy tinh gia cường phủ PTFE (Teflon), sau đó ghép nối hai đầu để tạo vòng băng khép kín theo kích thước yêu cầu. Bề mặt trơn nhẵn, chống dính, chịu nhiệt và hệ số ma sát thấp.",
+        "Với cấu tạo có mối nối, băng tải có thể gia công theo nhiều kích thước khác nhau, thuận tiện cho việc thay thế và bảo trì các hệ thống máy ép keo đang sử dụng."
+      ],
+      "specs": [
+        {
+          "label": "Tên tiếng Anh",
+          "value": "Jointed PTFE Fusing Machine Belt"
+        },
+        {
+          "label": "Vật liệu",
+          "value": "Sợi thủy tinh phủ PTFE (Teflon)"
+        },
+        {
+          "label": "Cấu tạo",
+          "value": "Vòng băng khép kín, hai đầu được ghép nối"
+        },
+        {
+          "label": "Bề mặt",
+          "value": "Trơn nhẵn, chống dính"
+        },
+        {
+          "label": "Độ dày",
+          "value": "Theo từng chủng loại và yêu cầu kỹ thuật"
+        },
+        {
+          "label": "Chiều rộng",
+          "value": "200 mm - 1800 mm"
+        },
+        {
+          "label": "Chiều dài vòng băng",
+          "value": "Theo kích thước băng trên và băng dưới của từng model"
+        },
+        {
+          "label": "Màu sắc",
+          "value": "Đen"
+        }
+      ],
+      "applications": [
+        "Thay thế băng tải cho máy ép keo đang sử dụng",
+        "Gia công theo nhiều kích thước khác nhau"
+      ],
+      "featured": false
+    },
+    {
+      "slug": "bang-tai-teflon-chiu-nhiet",
+      "name": "Băng tải Teflon chịu nhiệt",
+      "category": "bangtai",
+      "categoryLabel": "Băng tải Teflon",
+      "englishName": "",
+      "lead": "PTFE Conveyor Belt - bề mặt kín hoặc dạng lưới, dùng cho hệ thống sấy, gia nhiệt, xử lý bề mặt, vận chuyển liên tục.",
+      "miniSpecs": [
+        {
+          "value": "-70 → 260°C",
+          "label": "Nhiệt độ làm việc"
+        },
+        {
+          "value": "0.13-1.60 mm",
+          "label": "Độ dày"
+        },
+        {
+          "value": "Kín / Lưới",
+          "label": "Cấu trúc"
+        },
+        {
+          "value": "Nâu · Trắng · Đen",
+          "label": "Màu sắc"
+        }
+      ],
+      "images": [
+        "/images/products/bang-tai-teflon-chiu-nhiet.webp"
+      ],
+      "description": [
+        "Băng tải Teflon (PTFE Conveyor Belt) là dòng băng tải công nghiệp chuyên dụng, sản xuất từ sợi thủy tinh gia cường phủ nhựa PTFE, nổi bật với khả năng chịu nhiệt, chống bám dính, kháng hóa chất và hệ số ma sát thấp.",
+        "Sản phẩm dùng trong các hệ thống sấy, gia nhiệt, xử lý bề mặt và dây chuyền vận chuyển liên tục. Với hai kết cấu chính là bề mặt kín và dạng lưới, băng tải đáp ứng đa dạng yêu cầu sản xuất, đặc biệt trong môi trường nhiệt độ cao hoặc có nguy cơ bám dính vật liệu."
+      ],
+      "specs": [
+        {
+          "label": "Vật liệu",
+          "value": "Sợi thủy tinh phủ PTFE"
+        },
+        {
+          "label": "Cấu trúc",
+          "value": "Bề mặt kín / dạng lưới"
+        },
+        {
+          "label": "Độ dày",
+          "value": "0,13-0,50 mm (loại kín); 0,50-1,60 mm (loại lưới)"
+        },
+        {
+          "label": "Kích thước",
+          "value": "Theo yêu cầu"
+        },
+        {
+          "label": "Nhiệt độ làm việc",
+          "value": "-70°C đến +260°C"
+        },
+        {
+          "label": "Màu sắc",
+          "value": "Nâu, trắng, đen"
+        },
+        {
+          "label": "Gia công",
+          "value": "Cắt khổ, nối băng, gia cố biên, đóng nút hoặc dây gân dẫn hướng"
+        }
+      ],
+      "applications": [
+        "Hệ thống sấy và gia nhiệt",
+        "Xử lý bề mặt",
+        "Dây chuyền vận chuyển liên tục ở nhiệt độ cao"
+      ],
+      "featured": false
+    },
+    {
+      "slug": "day-dai-han-nhiet-teflon",
+      "name": "Dây đai hàn nhiệt Teflon",
+      "category": "daydai",
+      "englishName": "PTFE Sealing Belt",
+      "lead": "PTFE Sealing Belt - dây đai vòng cho máy hàn miệng túi liên tục, truyền nhiệt, ép kín và chống bám nhựa nóng chảy.",
+      "miniSpecs": [
+        {
+          "value": "đến 260°C",
+          "label": "Nhiệt độ làm việc"
+        },
+        {
+          "value": "10-38 mm",
+          "label": "Độ rộng"
+        },
+        {
+          "value": "750-2600 mm",
+          "label": "Chu vi"
+        },
+        {
+          "value": "Nâu · Trắng",
+          "label": "Màu sắc"
+        }
+      ],
+      "images": [
+        "/images/products/day-dai-han-nhiet-teflon.webp"
+      ],
+      "description": [
+        "Dây đai hàn nhiệt Teflon (PTFE Sealing Belt) là vật liệu chuyên dụng sản xuất từ nền sợi thủy tinh gia cường phủ nhựa PTFE, chịu nhiệt, chống bám dính và có hệ số ma sát thấp. Sản phẩm dạng dây đai vòng khép kín hoặc có mối nối, dùng chủ yếu trong máy hàn miệng túi liên tục và các hệ thống đóng gói tự động.",
+        "Trong quá trình vận hành, dây đai tiếp xúc với bộ phận gia nhiệt, hỗ trợ truyền nhiệt và ép kín đường hàn, đồng thời hạn chế nhựa nóng chảy bám dính lên bề mặt, góp phần duy trì chất lượng đường hàn và giảm gián đoạn vệ sinh."
+      ],
+      "specs": [
+        {
+          "label": "Tên tiếng Anh",
+          "value": "PTFE Sealing Belt"
+        },
+        {
+          "label": "Vật liệu",
+          "value": "Sợi thủy tinh phủ PTFE"
+        },
+        {
+          "label": "Độ rộng",
+          "value": "10-30 mm, một số loại đến 38 mm"
+        },
+        {
+          "label": "Chiều dài chu vi",
+          "value": "Khoảng 750 - 2.600 mm"
+        },
+        {
+          "label": "Độ dày",
+          "value": "0,13-0,30 mm"
+        },
+        {
+          "label": "Nhiệt độ làm việc",
+          "value": "Có thể đến 260°C"
+        },
+        {
+          "label": "Màu sắc",
+          "value": "Nâu, trắng"
+        },
+        {
+          "label": "Kết cấu",
+          "value": "Dạng vòng liền hoặc có mối nối"
+        },
+        {
+          "label": "Quy cách thường gặp (rộng × chu vi)",
+          "value": "15×750; 15×770; 12×815; 13×815; 15×1.010; 15×1.100; 15×1.120; 15×1.210 mm"
+        },
+        {
+          "label": "Gia công",
+          "value": "Theo kích thước và model máy; các khổ 16, 18, 20, 22, 25 mm… theo yêu cầu"
+        }
+      ],
+      "applications": [
+        "Máy hàn miệng túi liên tục",
+        "Hệ thống đóng gói tự động"
+      ],
+      "featured": true,
+      "categoryLabel": "Dây đai hàn nhiệt"
+    }
+  ],
+  "articles": [
+    {
+      "slug": "vai-teflon-ptfe-la-gi",
+      "title": "Vải Teflon (PTFE) là gì? Đặc điểm và ứng dụng trong công nghiệp",
+      "date": "12/11/2026",
+      "image": "/images/products/vai-chiu-nhiet-cao-cap.webp",
+      "excerpt": "Tìm hiểu cấu tạo vải sợi thủy tinh phủ PTFE và những đặc tính nổi bật: chịu nhiệt, chống dính, kháng hóa chất.",
+      "blocks": [
+        {
+          "type": "h",
+          "text": "Cấu tạo"
+        },
+        {
+          "type": "p",
+          "text": "Vải Teflon công nghiệp gồm nền sợi thủy tinh gia cường phủ lớp PTFE (Polytetrafluoroethylene). Sợi thủy tinh cho độ bền cơ học, lớp PTFE cho khả năng chống dính, chịu nhiệt và hệ số ma sát thấp."
+        },
+        {
+          "type": "h",
+          "text": "Đặc điểm nổi bật"
+        },
+        {
+          "type": "p",
+          "text": "Dải nhiệt độ làm việc tham khảo từ -73°C đến 260°C, bề mặt chống dính, kháng hóa chất và dễ vệ sinh."
+        },
+        {
+          "type": "h",
+          "text": "Ứng dụng"
+        },
+        {
+          "type": "p",
+          "text": "Làm lớp chống dính, lớp ngăn cách và vật liệu hỗ trợ trong thiết bị gia nhiệt, ép nhiệt, sấy và nhiều quy trình gia công công nghiệp."
+        }
+      ],
+      "relatedProducts": []
+    },
+    {
+      "slug": "chon-bang-tai-may-ep-keo",
+      "title": "Cách chọn băng tải máy ép keo đúng model máy",
+      "date": "10/11/2026",
+      "image": "/images/products/bang-tai-may-ep-keo-duc-lien.webp",
+      "excerpt": "Các thông số cần có khi đặt băng tải máy ép keo: chiều rộng, chu vi băng trên/dưới và loại mối nối.",
+      "blocks": [
+        {
+          "type": "h",
+          "text": "Cần chuẩn bị thông tin gì"
+        },
+        {
+          "type": "p",
+          "text": "Để đặt đúng băng tải, bạn cần biết model máy, chiều rộng băng và chiều dài vòng băng của băng trên và băng dưới."
+        },
+        {
+          "type": "h",
+          "text": "Đúc liền hay có mối nối"
+        },
+        {
+          "type": "p",
+          "text": "Băng đúc liền không có đường nối ghép; băng có mối nối gia công theo nhiều kích thước và thuận tiện thay thế, bảo trì."
+        },
+        {
+          "type": "h",
+          "text": "Màu sắc và tĩnh điện"
+        },
+        {
+          "type": "p",
+          "text": "Băng màu đen; tùy phiên bản có thể bổ sung carbon để hỗ trợ chống tĩnh điện."
+        }
+      ],
+      "relatedProducts": []
+    },
+    {
+      "slug": "phan-biet-vai-tron-va-nham",
+      "title": "Phân biệt vải Teflon bề mặt trơn và bề mặt nhám có vân",
+      "date": "08/11/2026",
+      "image": "/images/products/vai-chiu-nhiet-cong-nghiep.webp",
+      "excerpt": "Hai dòng vải PTFE có bề mặt khác nhau, phù hợp với những yêu cầu kỹ thuật khác nhau.",
+      "blocks": [
+        {
+          "type": "h",
+          "text": "Bề mặt trơn láng"
+        },
+        {
+          "type": "p",
+          "text": "Màu nâu, bề mặt nhẵn, phù hợp làm lớp chống dính và ngăn cách; độ dày từ 0.08 đến 0.35 mm."
+        },
+        {
+          "type": "h",
+          "text": "Bề mặt nhám có vân"
+        },
+        {
+          "type": "p",
+          "text": "Màu trắng, bề mặt có vân, phù hợp vị trí cần độ bám tiếp xúc; độ dày 0.12, 0.15, 0.18 mm."
+        },
+        {
+          "type": "h",
+          "text": "Chọn như thế nào"
+        },
+        {
+          "type": "p",
+          "text": "Xác định yêu cầu tiếp xúc của bề mặt và nhiệt độ làm việc trước khi chọn loại vải."
+        }
+      ],
+      "relatedProducts": []
+    },
+    {
+      "slug": "bao-quan-dai-han-nhiet",
+      "title": "Dây đai hàn nhiệt Teflon: chọn kích thước theo model máy hàn miệng túi",
+      "date": "05/11/2026",
+      "image": "/images/products/day-dai-han-nhiet-teflon.webp",
+      "excerpt": "Hướng dẫn đo và cung cấp thông số rộng × chu vi để đặt dây đai hàn nhiệt chính xác.",
+      "blocks": [
+        {
+          "type": "h",
+          "text": "Thông số cần cung cấp"
+        },
+        {
+          "type": "p",
+          "text": "Độ rộng (10-38 mm) và chiều dài chu vi (khoảng 750-2.600 mm), kèm model máy nếu có."
+        },
+        {
+          "type": "h",
+          "text": "Quy cách thường gặp"
+        },
+        {
+          "type": "p",
+          "text": "15×750, 15×770, 12×815, 13×815, 15×1.010, 15×1.100, 15×1.120, 15×1.210 mm; các khổ khác gia công theo yêu cầu."
+        }
+      ],
+      "relatedProducts": []
+    },
+    {
+      "slug": "chon-do-day-bang-keo",
+      "title": "Băng keo Teflon: chọn độ dày và khổ rộng phù hợp",
+      "date": "02/11/2026",
+      "image": "/images/products/bang-keo-chiu-nhiet-13-80mm.webp",
+      "excerpt": "Băng keo Teflon có độ dày 0.13, 0.18 và 0.3 mm; khổ từ 13 mm đến 300 mm dạng cuộn 10 m.",
+      "blocks": [
+        {
+          "type": "h",
+          "text": "Độ dày"
+        },
+        {
+          "type": "p",
+          "text": "Ba độ dày thông dụng là 0.13 mm, 0.18 mm và 0.3 mm, đều có lớp keo silicone chịu nhiệt."
+        },
+        {
+          "type": "h",
+          "text": "Khổ rộng"
+        },
+        {
+          "type": "p",
+          "text": "Khổ nhỏ 13-80 mm cho thanh hàn nhiệt; khổ 100-300 mm cho bề mặt rộng; dạng tấm khổ 1 m cho diện tích lớn."
+        }
+      ],
+      "relatedProducts": []
+    },
+    {
+      "slug": "duc-lien-hay-moi-noi",
+      "title": "Băng tải đúc liền và có mối nối: nên chọn loại nào?",
+      "date": "30/10/2026",
+      "image": "/images/products/bang-tai-may-ep-keo-moi-noi.webp",
+      "excerpt": "So sánh hai cấu tạo băng tải máy ép keo để chọn đúng loại cho nhu cầu vận hành và bảo trì.",
+      "blocks": [
+        {
+          "type": "h",
+          "text": "Băng đúc liền"
+        },
+        {
+          "type": "p",
+          "text": "Vòng băng liên tục, không đường nối ghép, độ dày khoảng 0.45-0.50 mm."
+        },
+        {
+          "type": "h",
+          "text": "Băng có mối nối"
+        },
+        {
+          "type": "p",
+          "text": "Ghép nối hai đầu theo kích thước yêu cầu, thuận tiện thay thế cho máy đang sử dụng."
+        },
+        {
+          "type": "h",
+          "text": "Gợi ý"
+        },
+        {
+          "type": "p",
+          "text": "Liên hệ Vina Khang với model máy để được tư vấn loại phù hợp."
+        }
+      ],
+      "relatedProducts": []
+    },
+    {
+      "slug": "tam-teflon-in-chuyen-nhiet",
+      "title": "Tấm chống dính Teflon trong ép nhiệt và in chuyển nhiệt",
+      "date": "27/10/2026",
+      "image": "/images/products/tam-chong-dinh-chiu-nhiet.webp",
+      "excerpt": "Vai trò của tấm Teflon phủ sợi thủy tinh trong ép nhiệt, chế biến thực phẩm và in chuyển nhiệt.",
+      "blocks": [
+        {
+          "type": "h",
+          "text": "Vai trò"
+        },
+        {
+          "type": "p",
+          "text": "Tấm Teflon là lớp ngăn cách giữa bàn ép và vật liệu, giúp hạn chế bám dính và dễ vệ sinh."
+        },
+        {
+          "type": "h",
+          "text": "Kích thước"
+        },
+        {
+          "type": "p",
+          "text": "Thông dụng 40×60 cm, 50×70 cm và có thể cắt theo yêu cầu."
+        }
+      ],
+      "relatedProducts": []
+    },
+    {
+      "slug": "vat-lieu-chong-tinh-dien-carbon",
+      "title": "Khi nào cần vật liệu Teflon chống tĩnh điện (carbon)?",
+      "date": "24/10/2026",
+      "image": "/images/products/vai-chiu-nhiet-025-035.webp",
+      "excerpt": "Phiên bản màu đen chứa carbon hỗ trợ phân tán điện tích, hạn chế tích tụ tĩnh điện trong vận hành.",
+      "blocks": [
+        {
+          "type": "h",
+          "text": "Carbon trong vật liệu PTFE"
+        },
+        {
+          "type": "p",
+          "text": "Một số phiên bản của tấm Teflon và băng tải ép keo bổ sung thành phần carbon, hỗ trợ phân tán điện tích."
+        },
+        {
+          "type": "h",
+          "text": "Khi nào nên dùng"
+        },
+        {
+          "type": "p",
+          "text": "Khi quy trình của bạn nhạy với tĩnh điện, hãy trao đổi với Vina Khang để chọn phiên bản phù hợp."
+        }
+      ],
+      "relatedProducts": []
+    }
+  ],
+  "applications": [
+    {
+      "slug": "boc-phu-bao-ve-thiet-bi",
+      "title": "Bọc phủ & bảo vệ thiết bị",
+      "image": "/images/products/bang-keo-chiu-nhiet-dang-tam.webp",
+      "excerpt": "Vải và băng keo Teflon dạng tấm dán phủ khuôn ép, bàn gia nhiệt, trục rulo diện tích lớn.",
+      "blocks": [
+        {
+          "type": "p",
+          "text": "Vải và băng keo Teflon dạng tấm dán phủ khuôn ép, bàn gia nhiệt, trục rulo diện tích lớn."
+        },
+        {
+          "type": "h",
+          "text": "Ứng dụng"
+        },
+        {
+          "type": "p",
+          "text": "Vải Teflon có keo silicone dễ dán và cố định trên khuôn ép, bàn gia nhiệt và trục rulo, tạo lớp lót chống dính và bảo vệ thiết bị."
+        },
+        {
+          "type": "h",
+          "text": "Sản phẩm phù hợp"
+        },
+        {
+          "type": "p",
+          "text": "Băng keo dạng tấm khổ 1 m (0.18 / 0.30 mm) và vải chịu nhiệt dày 0.25 / 0.35 mm cho vị trí cần che chắn, bảo vệ."
+        }
+      ],
+      "relatedProducts": []
+    },
+    {
+      "slug": "che-bien-thuc-pham",
+      "title": "Chế biến thực phẩm",
+      "image": "/images/products/tam-chong-dinh-chiu-nhiet.webp",
+      "excerpt": "Tấm và vải chống dính, dễ vệ sinh cho các công đoạn gia nhiệt trong chế biến thực phẩm.",
+      "blocks": [
+        {
+          "type": "p",
+          "text": "Tấm và vải chống dính, dễ vệ sinh cho các công đoạn gia nhiệt trong chế biến thực phẩm."
+        },
+        {
+          "type": "h",
+          "text": "Ứng dụng"
+        },
+        {
+          "type": "p",
+          "text": "Tấm chống dính Teflon phủ sợi thủy tinh có bề mặt trơn nhẵn, hạn chế bám dính và dễ vệ sinh, được sử dụng trong các công đoạn gia nhiệt của chế biến thực phẩm."
+        },
+        {
+          "type": "h",
+          "text": "Lưu ý"
+        },
+        {
+          "type": "p",
+          "text": "Vui lòng liên hệ Vina Khang để được tư vấn quy cách và yêu cầu về vật liệu tiếp xúc thực phẩm phù hợp với quy trình của bạn."
+        }
+      ],
+      "relatedProducts": []
+    },
+    {
+      "slug": "dong-goi-han-mieng-tui",
+      "title": "Đóng gói - máy hàn miệng túi",
+      "image": "/images/products/day-dai-han-nhiet-teflon.webp",
+      "excerpt": "Dây đai hàn nhiệt và băng keo Teflon giúp ép kín đường hàn, hạn chế nhựa nóng chảy bám dính.",
+      "blocks": [
+        {
+          "type": "p",
+          "text": "Dây đai hàn nhiệt và băng keo Teflon giúp ép kín đường hàn, hạn chế nhựa nóng chảy bám dính."
+        },
+        {
+          "type": "h",
+          "text": "Ứng dụng"
+        },
+        {
+          "type": "p",
+          "text": "Máy hàn miệng túi liên tục và các hệ thống đóng gói tự động dùng dây đai hàn nhiệt Teflon để truyền nhiệt và ép kín đường hàn, đồng thời hạn chế nhựa nóng chảy bám lên bề mặt."
+        },
+        {
+          "type": "h",
+          "text": "Sản phẩm phù hợp"
+        },
+        {
+          "type": "p",
+          "text": "Dây đai hàn nhiệt Teflon theo model máy (rộng 10-38 mm, chu vi khoảng 750-2.600 mm) và băng keo chịu nhiệt để phủ thanh hàn nhiệt."
+        }
+      ],
+      "relatedProducts": []
+    },
+    {
+      "slug": "giay-dep-ep-dan",
+      "title": "Ngành giày dép - ép dán vật liệu",
+      "image": "/images/products/bang-tai-may-ep-keo-moi-noi.webp",
+      "excerpt": "Băng tải và vải Teflon cho các dây chuyền ép dán vật liệu, ổn định nhiệt và chống dính.",
+      "blocks": [
+        {
+          "type": "p",
+          "text": "Băng tải và vải Teflon cho các dây chuyền ép dán vật liệu, ổn định nhiệt và chống dính."
+        },
+        {
+          "type": "h",
+          "text": "Ứng dụng"
+        },
+        {
+          "type": "p",
+          "text": "Trong sản xuất giày dép, các công đoạn ép dán vật liệu đòi hỏi bề mặt tiếp xúc chịu nhiệt và không bám keo. Băng tải máy ép keo PTFE và vải chịu nhiệt Teflon là lựa chọn phổ biến cho các dây chuyền này."
+        },
+        {
+          "type": "h",
+          "text": "Lợi ích"
+        },
+        {
+          "type": "p",
+          "text": "Quá trình liên kết vật liệu diễn ra liên tục, ổn định; giảm thời gian vệ sinh nhờ bề mặt chống dính."
+        }
+      ],
+      "relatedProducts": []
+    },
+    {
+      "slug": "in-chuyen-nhiet",
+      "title": "In chuyển nhiệt",
+      "image": "/images/products/vai-chiu-nhiet-cao-cap.webp",
+      "excerpt": "Tấm chống dính Teflon làm lớp ngăn cách, bảo vệ bàn ép và bề mặt sản phẩm khi in chuyển nhiệt.",
+      "blocks": [
+        {
+          "type": "p",
+          "text": "Tấm chống dính Teflon làm lớp ngăn cách, bảo vệ bàn ép và bề mặt sản phẩm khi in chuyển nhiệt."
+        },
+        {
+          "type": "h",
+          "text": "Ứng dụng"
+        },
+        {
+          "type": "p",
+          "text": "Khi ép nhiệt và in chuyển nhiệt, tấm Teflon đóng vai trò lớp ngăn cách giữa bàn ép và vật liệu, hạn chế dính và giữ bề mặt sạch."
+        },
+        {
+          "type": "h",
+          "text": "Sản phẩm phù hợp"
+        },
+        {
+          "type": "p",
+          "text": "Tấm chống dính chịu nhiệt (40×60 cm, 50×70 cm hoặc theo yêu cầu) và băng keo dạng tấm để dán phủ bàn gia nhiệt."
+        }
+      ],
+      "relatedProducts": []
+    },
+    {
+      "slug": "may-mac-ep-keo",
+      "title": "Ngành may mặc - máy ép keo",
+      "image": "/images/products/bang-tai-may-ep-keo-duc-lien.webp",
+      "excerpt": "Băng tải PTFE vận chuyển vải, keo dựng qua vùng gia nhiệt và ép một cách liên tục, ổn định.",
+      "blocks": [
+        {
+          "type": "p",
+          "text": "Băng tải PTFE vận chuyển vải, keo dựng qua vùng gia nhiệt và ép một cách liên tục, ổn định."
+        },
+        {
+          "type": "h",
+          "text": "Bài toán của máy ép keo"
+        },
+        {
+          "type": "p",
+          "text": "Máy ép keo trong ngành may mặc cần băng tải chịu được nhiệt, chống dính keo và chạy liên tục. Băng tải PTFE phủ sợi thủy tinh có bề mặt trơn nhẵn, hạn chế keo bám và vận chuyển vải, keo dựng đi qua vùng gia nhiệt và ép."
+        },
+        {
+          "type": "h",
+          "text": "Giải pháp từ Vina Khang"
+        },
+        {
+          "type": "p",
+          "text": "Vina Khang cung cấp băng tải máy ép keo dạng đúc liền (không mối nối) và dạng có mối nối, gia công theo kích thước băng trên và băng dưới của từng model máy, khổ rộng từ 200 mm đến 1800 mm."
+        }
+      ],
+      "relatedProducts": []
+    },
+    {
+      "slug": "say-xu-ly-be-mat",
+      "title": "Hệ thống sấy & xử lý bề mặt",
+      "image": "/images/products/bang-tai-teflon-chiu-nhiet.webp",
+      "excerpt": "Băng tải Teflon bề mặt kín hoặc dạng lưới cho hệ thống sấy, gia nhiệt và vận chuyển liên tục.",
+      "blocks": [
+        {
+          "type": "p",
+          "text": "Băng tải Teflon bề mặt kín hoặc dạng lưới cho hệ thống sấy, gia nhiệt và vận chuyển liên tục."
+        },
+        {
+          "type": "h",
+          "text": "Ứng dụng"
+        },
+        {
+          "type": "p",
+          "text": "Băng tải Teflon chịu nhiệt phù hợp hệ thống sấy, gia nhiệt, xử lý bề mặt và dây chuyền vận chuyển liên tục, đặc biệt trong môi trường nhiệt độ cao hoặc có nguy cơ bám dính vật liệu."
+        },
+        {
+          "type": "h",
+          "text": "Kết cấu"
+        },
+        {
+          "type": "p",
+          "text": "Loại bề mặt kín (0,13-0,50 mm) và loại dạng lưới (0,50-1,60 mm); gia công cắt khổ, nối băng, gia cố biên theo yêu cầu."
+        }
+      ],
+      "relatedProducts": []
+    },
+    {
+      "slug": "thiet-bi-ep-nhiet",
+      "title": "Thiết bị ép nhiệt & gia nhiệt",
+      "image": "/images/products/bang-keo-chiu-nhiet-13-80mm.webp",
+      "excerpt": "Phủ thanh hàn nhiệt, thanh ép và bộ phận gia nhiệt bằng băng keo Teflon để chống bám nhựa, keo nóng.",
+      "blocks": [
+        {
+          "type": "p",
+          "text": "Phủ thanh hàn nhiệt, thanh ép và bộ phận gia nhiệt bằng băng keo Teflon để chống bám nhựa, keo nóng."
+        },
+        {
+          "type": "h",
+          "text": "Ứng dụng"
+        },
+        {
+          "type": "p",
+          "text": "Băng keo Teflon chịu nhiệt có lớp keo silicone ở mặt sau, dễ dán lên thanh hàn nhiệt, thanh ép và các bề mặt tiếp xúc với nhựa hoặc keo nóng."
+        },
+        {
+          "type": "h",
+          "text": "Chọn khổ rộng"
+        },
+        {
+          "type": "p",
+          "text": "Khổ 13-80 mm cho thanh hàn và chi tiết nhỏ; khổ từ 100 mm đến 300 mm cho bề mặt rộng hơn."
+        }
+      ],
+      "relatedProducts": []
+    }
+  ],
+  "jobs": [
+    {
+      "slug": "nhan-vien-cham-soc-khach-hang",
+      "title": "Nhân viên chăm sóc khách hàng",
+      "department": "Kinh doanh",
+      "facts": [
+        {
+          "value": "01",
+          "label": "Số lượng"
+        },
+        {
+          "value": "Toàn thời gian",
+          "label": "Hình thức"
+        },
+        {
+          "value": "TP. HCM",
+          "label": "Địa điểm (Bà Điểm)"
+        },
+        {
+          "value": "Thỏa thuận",
+          "label": "Mức lương"
+        }
+      ],
+      "blocks": [
+        {
+          "type": "h",
+          "text": "Mô tả công việc"
+        },
+        {
+          "type": "list",
+          "items": [
+            "Tiếp nhận và phản hồi yêu cầu của khách hàng qua điện thoại, Zalo, email",
+            "Hỗ trợ lập báo giá, xác nhận đơn hàng",
+            "Cập nhật tiến độ gia công và giao hàng cho khách",
+            "Lưu trữ thông tin khách hàng"
+          ]
+        },
+        {
+          "type": "h",
+          "text": "Yêu cầu ứng viên"
+        },
+        {
+          "type": "list",
+          "items": [
+            "Tốt nghiệp trung cấp trở lên",
+            "Giọng nói rõ ràng, kỹ năng giao tiếp tốt",
+            "Sử dụng tốt tin học văn phòng",
+            "Nhanh nhẹn, có trách nhiệm"
+          ]
+        },
+        {
+          "type": "h",
+          "text": "Quyền lợi"
+        },
+        {
+          "type": "list",
+          "items": [
+            "Mức lương thỏa thuận theo năng lực, xét tăng định kỳ",
+            "Môi trường làm việc chuyên nghiệp, đồng nghiệp thân thiện",
+            "Được đào tạo kiến thức sản phẩm Teflon/PTFE và kỹ năng chuyên môn",
+            "Thưởng lễ, Tết và các chế độ theo quy định của pháp luật"
+          ]
+        },
+        {
+          "type": "h",
+          "text": "Cách thức ứng tuyển"
+        },
+        {
+          "type": "p",
+          "text": "Bấm nút Ứng tuyển để gửi thông tin và đính kèm CV, hoặc gửi CV về vinakhangtrade@gmail.com. Địa điểm làm việc: 101/3Q Ấp Mỹ Hòa 1, Xã Bà Điểm, TP. HCM."
+        }
+      ]
+    },
+    {
+      "slug": "nhan-vien-gia-cong",
+      "title": "Nhân viên gia công cắt khổ, nối băng",
+      "department": "Sản xuất - Gia công",
+      "facts": [
+        {
+          "value": "02",
+          "label": "Số lượng"
+        },
+        {
+          "value": "Toàn thời gian",
+          "label": "Hình thức"
+        },
+        {
+          "value": "TP. HCM",
+          "label": "Địa điểm (Bà Điểm)"
+        },
+        {
+          "value": "Thỏa thuận",
+          "label": "Mức lương"
+        }
+      ],
+      "blocks": [
+        {
+          "type": "h",
+          "text": "Mô tả công việc"
+        },
+        {
+          "type": "list",
+          "items": [
+            "Cắt khổ vải, băng keo và băng tải theo yêu cầu",
+            "Nối băng, gia cố biên, đóng nút hoặc dây gân dẫn hướng",
+            "Kiểm tra kích thước, chất lượng thành phẩm",
+            "Giữ gìn vệ sinh, an toàn khu vực làm việc"
+          ]
+        },
+        {
+          "type": "h",
+          "text": "Yêu cầu ứng viên"
+        },
+        {
+          "type": "list",
+          "items": [
+            "Có kỹ năng thao tác thủ công, tỉ mỉ",
+            "Đọc được thước đo, bản vẽ đơn giản",
+            "Ưu tiên người từng làm may, cơ khí hoặc gia công vật liệu",
+            "Chịu được cường độ làm việc"
+          ]
+        },
+        {
+          "type": "h",
+          "text": "Quyền lợi"
+        },
+        {
+          "type": "list",
+          "items": [
+            "Mức lương thỏa thuận theo năng lực, xét tăng định kỳ",
+            "Môi trường làm việc chuyên nghiệp, đồng nghiệp thân thiện",
+            "Được đào tạo kiến thức sản phẩm Teflon/PTFE và kỹ năng chuyên môn",
+            "Thưởng lễ, Tết và các chế độ theo quy định của pháp luật"
+          ]
+        },
+        {
+          "type": "h",
+          "text": "Cách thức ứng tuyển"
+        },
+        {
+          "type": "p",
+          "text": "Bấm nút Ứng tuyển để gửi thông tin và đính kèm CV, hoặc gửi CV về vinakhangtrade@gmail.com. Địa điểm làm việc: 101/3Q Ấp Mỹ Hòa 1, Xã Bà Điểm, TP. HCM."
+        }
+      ]
+    },
+    {
+      "slug": "nhan-vien-ke-toan",
+      "title": "Nhân viên kế toán",
+      "department": "Hành chính - Kế toán",
+      "facts": [
+        {
+          "value": "01",
+          "label": "Số lượng"
+        },
+        {
+          "value": "Toàn thời gian",
+          "label": "Hình thức"
+        },
+        {
+          "value": "TP. HCM",
+          "label": "Địa điểm (Bà Điểm)"
+        },
+        {
+          "value": "Thỏa thuận",
+          "label": "Mức lương"
+        }
+      ],
+      "blocks": [
+        {
+          "type": "h",
+          "text": "Mô tả công việc"
+        },
+        {
+          "type": "list",
+          "items": [
+            "Lập chứng từ, hóa đơn và theo dõi công nợ khách hàng, nhà cung cấp",
+            "Theo dõi thu chi, đối chiếu số liệu với kho và kinh doanh",
+            "Hỗ trợ kê khai thuế, lập báo cáo theo yêu cầu",
+            "Lưu trữ hồ sơ, chứng từ"
+          ]
+        },
+        {
+          "type": "h",
+          "text": "Yêu cầu ứng viên"
+        },
+        {
+          "type": "list",
+          "items": [
+            "Tốt nghiệp cao đẳng/đại học chuyên ngành kế toán, tài chính",
+            "Có kinh nghiệm kế toán thương mại là lợi thế",
+            "Sử dụng thành thạo Excel và phần mềm kế toán",
+            "Trung thực, cẩn thận"
+          ]
+        },
+        {
+          "type": "h",
+          "text": "Quyền lợi"
+        },
+        {
+          "type": "list",
+          "items": [
+            "Mức lương thỏa thuận theo năng lực, xét tăng định kỳ",
+            "Môi trường làm việc chuyên nghiệp, đồng nghiệp thân thiện",
+            "Được đào tạo kiến thức sản phẩm Teflon/PTFE và kỹ năng chuyên môn",
+            "Thưởng lễ, Tết và các chế độ theo quy định của pháp luật"
+          ]
+        },
+        {
+          "type": "h",
+          "text": "Cách thức ứng tuyển"
+        },
+        {
+          "type": "p",
+          "text": "Bấm nút Ứng tuyển để gửi thông tin và đính kèm CV, hoặc gửi CV về vinakhangtrade@gmail.com. Địa điểm làm việc: 101/3Q Ấp Mỹ Hòa 1, Xã Bà Điểm, TP. HCM."
+        }
+      ]
+    },
+    {
+      "slug": "nhan-vien-kho-giao-nhan",
+      "title": "Nhân viên kho - giao nhận",
+      "department": "Kho vận",
+      "facts": [
+        {
+          "value": "02",
+          "label": "Số lượng"
+        },
+        {
+          "value": "Toàn thời gian",
+          "label": "Hình thức"
+        },
+        {
+          "value": "TP. HCM",
+          "label": "Địa điểm (Bà Điểm)"
+        },
+        {
+          "value": "Thỏa thuận",
+          "label": "Mức lương"
+        }
+      ],
+      "blocks": [
+        {
+          "type": "h",
+          "text": "Mô tả công việc"
+        },
+        {
+          "type": "list",
+          "items": [
+            "Nhận hàng, kiểm đếm và sắp xếp kho",
+            "Đóng gói, chuẩn bị hàng theo đơn",
+            "Giao hàng cho khách theo lịch",
+            "Cập nhật số liệu xuất nhập tồn"
+          ]
+        },
+        {
+          "type": "h",
+          "text": "Yêu cầu ứng viên"
+        },
+        {
+          "type": "list",
+          "items": [
+            "Sức khỏe tốt, trung thực, chịu khó",
+            "Có bằng lái xe là lợi thế",
+            "Ưu tiên người có kinh nghiệm làm kho vật tư"
+          ]
+        },
+        {
+          "type": "h",
+          "text": "Quyền lợi"
+        },
+        {
+          "type": "list",
+          "items": [
+            "Mức lương thỏa thuận theo năng lực, xét tăng định kỳ",
+            "Môi trường làm việc chuyên nghiệp, đồng nghiệp thân thiện",
+            "Được đào tạo kiến thức sản phẩm Teflon/PTFE và kỹ năng chuyên môn",
+            "Thưởng lễ, Tết và các chế độ theo quy định của pháp luật"
+          ]
+        },
+        {
+          "type": "h",
+          "text": "Cách thức ứng tuyển"
+        },
+        {
+          "type": "p",
+          "text": "Bấm nút Ứng tuyển để gửi thông tin và đính kèm CV, hoặc gửi CV về vinakhangtrade@gmail.com. Địa điểm làm việc: 101/3Q Ấp Mỹ Hòa 1, Xã Bà Điểm, TP. HCM."
+        }
+      ]
+    },
+    {
+      "slug": "nhan-vien-kinh-doanh",
+      "title": "Nhân viên kinh doanh vật tư công nghiệp",
+      "department": "Kinh doanh",
+      "facts": [
+        {
+          "value": "02",
+          "label": "Số lượng"
+        },
+        {
+          "value": "Toàn thời gian",
+          "label": "Hình thức"
+        },
+        {
+          "value": "TP. HCM",
+          "label": "Địa điểm (Bà Điểm)"
+        },
+        {
+          "value": "Thỏa thuận",
+          "label": "Mức lương"
+        }
+      ],
+      "blocks": [
+        {
+          "type": "h",
+          "text": "Mô tả công việc"
+        },
+        {
+          "type": "list",
+          "items": [
+            "Tìm kiếm khách hàng mới và chăm sóc khách hàng hiện hữu trong các ngành may mặc, giày dép, bao bì, thực phẩm",
+            "Tiếp nhận nhu cầu, tư vấn sản phẩm và lập báo giá",
+            "Theo dõi đơn hàng, phối hợp kho và giao hàng",
+            "Báo cáo công việc định kỳ cho quản lý"
+          ]
+        },
+        {
+          "type": "h",
+          "text": "Yêu cầu ứng viên"
+        },
+        {
+          "type": "list",
+          "items": [
+            "Tốt nghiệp trung cấp trở lên, ưu tiên chuyên ngành kinh doanh, kỹ thuật",
+            "Kỹ năng giao tiếp, đàm phán tốt",
+            "Có kinh nghiệm bán vật tư công nghiệp là lợi thế",
+            "Sử dụng thành thạo Zalo, Excel, email"
+          ]
+        },
+        {
+          "type": "h",
+          "text": "Quyền lợi"
+        },
+        {
+          "type": "list",
+          "items": [
+            "Mức lương thỏa thuận theo năng lực, xét tăng định kỳ",
+            "Môi trường làm việc chuyên nghiệp, đồng nghiệp thân thiện",
+            "Được đào tạo kiến thức sản phẩm Teflon/PTFE và kỹ năng chuyên môn",
+            "Thưởng lễ, Tết và các chế độ theo quy định của pháp luật"
+          ]
+        },
+        {
+          "type": "h",
+          "text": "Cách thức ứng tuyển"
+        },
+        {
+          "type": "p",
+          "text": "Bấm nút Ứng tuyển để gửi thông tin và đính kèm CV, hoặc gửi CV về vinakhangtrade@gmail.com. Địa điểm làm việc: 101/3Q Ấp Mỹ Hòa 1, Xã Bà Điểm, TP. HCM."
+        }
+      ]
+    },
+    {
+      "slug": "nhan-vien-marketing-online",
+      "title": "Nhân viên marketing online",
+      "department": "Marketing",
+      "facts": [
+        {
+          "value": "01",
+          "label": "Số lượng"
+        },
+        {
+          "value": "Toàn thời gian",
+          "label": "Hình thức"
+        },
+        {
+          "value": "TP. HCM",
+          "label": "Địa điểm (Bà Điểm)"
+        },
+        {
+          "value": "Thỏa thuận",
+          "label": "Mức lương"
+        }
+      ],
+      "blocks": [
+        {
+          "type": "h",
+          "text": "Mô tả công việc"
+        },
+        {
+          "type": "list",
+          "items": [
+            "Xây dựng và đăng nội dung trên website, Facebook, Zalo, TikTok",
+            "Chụp, chỉnh sửa hình ảnh và video sản phẩm",
+            "Cập nhật sản phẩm, tin tức trên website",
+            "Phối hợp kinh doanh thu hút khách hàng tiềm năng"
+          ]
+        },
+        {
+          "type": "h",
+          "text": "Yêu cầu ứng viên"
+        },
+        {
+          "type": "list",
+          "items": [
+            "Tốt nghiệp cao đẳng/đại học marketing, truyền thông hoặc tương đương",
+            "Thành thạo công cụ thiết kế cơ bản (Canva, Photoshop…)",
+            "Viết tốt, sáng tạo",
+            "Có portfolio là lợi thế"
+          ]
+        },
+        {
+          "type": "h",
+          "text": "Quyền lợi"
+        },
+        {
+          "type": "list",
+          "items": [
+            "Mức lương thỏa thuận theo năng lực, xét tăng định kỳ",
+            "Môi trường làm việc chuyên nghiệp, đồng nghiệp thân thiện",
+            "Được đào tạo kiến thức sản phẩm Teflon/PTFE và kỹ năng chuyên môn",
+            "Thưởng lễ, Tết và các chế độ theo quy định của pháp luật"
+          ]
+        },
+        {
+          "type": "h",
+          "text": "Cách thức ứng tuyển"
+        },
+        {
+          "type": "p",
+          "text": "Bấm nút Ứng tuyển để gửi thông tin và đính kèm CV, hoặc gửi CV về vinakhangtrade@gmail.com. Địa điểm làm việc: 101/3Q Ấp Mỹ Hòa 1, Xã Bà Điểm, TP. HCM."
+        }
+      ]
+    },
+    {
+      "slug": "nhan-vien-tu-van-ky-thuat",
+      "title": "Nhân viên tư vấn kỹ thuật",
+      "department": "Kỹ thuật",
+      "facts": [
+        {
+          "value": "01",
+          "label": "Số lượng"
+        },
+        {
+          "value": "Toàn thời gian",
+          "label": "Hình thức"
+        },
+        {
+          "value": "TP. HCM",
+          "label": "Địa điểm (Bà Điểm)"
+        },
+        {
+          "value": "Thỏa thuận",
+          "label": "Mức lương"
+        }
+      ],
+      "blocks": [
+        {
+          "type": "h",
+          "text": "Mô tả công việc"
+        },
+        {
+          "type": "list",
+          "items": [
+            "Tiếp nhận thông số máy, bản vẽ và yêu cầu từ khách hàng",
+            "Tư vấn loại vật liệu, độ dày, khổ rộng và cách gia công phù hợp",
+            "Phối hợp bộ phận gia công kiểm tra quy cách trước khi giao",
+            "Hỗ trợ khách hàng sau bán hàng"
+          ]
+        },
+        {
+          "type": "h",
+          "text": "Yêu cầu ứng viên"
+        },
+        {
+          "type": "list",
+          "items": [
+            "Tốt nghiệp cao đẳng/đại học kỹ thuật, cơ khí hoặc tương đương",
+            "Đọc hiểu thông số kỹ thuật và bản vẽ cơ bản",
+            "Cẩn thận, có tinh thần học hỏi",
+            "Ưu tiên người từng làm với máy ép keo, máy hàn miệng túi"
+          ]
+        },
+        {
+          "type": "h",
+          "text": "Quyền lợi"
+        },
+        {
+          "type": "list",
+          "items": [
+            "Mức lương thỏa thuận theo năng lực, xét tăng định kỳ",
+            "Môi trường làm việc chuyên nghiệp, đồng nghiệp thân thiện",
+            "Được đào tạo kiến thức sản phẩm Teflon/PTFE và kỹ năng chuyên môn",
+            "Thưởng lễ, Tết và các chế độ theo quy định của pháp luật"
+          ]
+        },
+        {
+          "type": "h",
+          "text": "Cách thức ứng tuyển"
+        },
+        {
+          "type": "p",
+          "text": "Bấm nút Ứng tuyển để gửi thông tin và đính kèm CV, hoặc gửi CV về vinakhangtrade@gmail.com. Địa điểm làm việc: 101/3Q Ấp Mỹ Hòa 1, Xã Bà Điểm, TP. HCM."
+        }
+      ]
+    },
+    {
+      "slug": "tai-xe-giao-hang",
+      "title": "Tài xế giao hàng",
+      "department": "Kho vận",
+      "facts": [
+        {
+          "value": "01",
+          "label": "Số lượng"
+        },
+        {
+          "value": "Toàn thời gian",
+          "label": "Hình thức"
+        },
+        {
+          "value": "TP. HCM",
+          "label": "Địa điểm (Bà Điểm)"
+        },
+        {
+          "value": "Thỏa thuận",
+          "label": "Mức lương"
+        }
+      ],
+      "blocks": [
+        {
+          "type": "h",
+          "text": "Mô tả công việc"
+        },
+        {
+          "type": "list",
+          "items": [
+            "Vận chuyển hàng hóa đến khách hàng theo lịch",
+            "Kiểm tra hàng trước khi giao, lấy xác nhận nhận hàng",
+            "Bảo quản phương tiện sạch sẽ, an toàn"
+          ]
+        },
+        {
+          "type": "h",
+          "text": "Yêu cầu ứng viên"
+        },
+        {
+          "type": "list",
+          "items": [
+            "Có bằng lái phù hợp, thông thuộc đường TP. HCM",
+            "Trung thực, đúng giờ",
+            "Ưu tiên người có kinh nghiệm giao hàng công nghiệp"
+          ]
+        },
+        {
+          "type": "h",
+          "text": "Quyền lợi"
+        },
+        {
+          "type": "list",
+          "items": [
+            "Mức lương thỏa thuận theo năng lực, xét tăng định kỳ",
+            "Môi trường làm việc chuyên nghiệp, đồng nghiệp thân thiện",
+            "Được đào tạo kiến thức sản phẩm Teflon/PTFE và kỹ năng chuyên môn",
+            "Thưởng lễ, Tết và các chế độ theo quy định của pháp luật"
+          ]
+        },
+        {
+          "type": "h",
+          "text": "Cách thức ứng tuyển"
+        },
+        {
+          "type": "p",
+          "text": "Bấm nút Ứng tuyển để gửi thông tin và đính kèm CV, hoặc gửi CV về vinakhangtrade@gmail.com. Địa điểm làm việc: 101/3Q Ấp Mỹ Hòa 1, Xã Bà Điểm, TP. HCM."
+        }
+      ]
+    }
+  ],
+  "categories": [
+    {
+      "slug": "vai",
+      "label": "Vải Teflon chịu nhiệt",
+      "count": 4
+    },
+    {
+      "slug": "bangkeo",
+      "label": "Băng keo chịu nhiệt",
+      "count": 3
+    },
+    {
+      "slug": "epkeo",
+      "label": "Băng tải máy ép keo",
+      "count": 2
+    },
+    {
+      "slug": "bangtai",
+      "label": "Băng tải Teflon",
+      "count": 1
+    },
+    {
+      "slug": "daydai",
+      "label": "Dây đai hàn nhiệt",
+      "count": 1
+    }
+  ]
+}
