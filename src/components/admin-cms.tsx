@@ -37,14 +37,7 @@ import { cn, formatDateTime, telHref } from "@/lib/format";
 import { STATUS_LABELS, type QuoteStatus } from "@/lib/request";
 import type { StoredRequest } from "@/lib/requests-store";
 import type { Block } from "@/lib/types";
-
-const CATEGORY_OPTIONS = [
-  { slug: "vai", label: "Vải Teflon chịu nhiệt" },
-  { slug: "bangkeo", label: "Băng keo chịu nhiệt" },
-  { slug: "epkeo", label: "Băng tải máy ép keo" },
-  { slug: "bangtai", label: "Băng tải Teflon" },
-  { slug: "daydai", label: "Dây đai hàn nhiệt" },
-];
+import CATEGORY_OPTIONS from "@/data/product-categories.json";
 
 const JOB_TYPES = ["Toàn thời gian", "Bán thời gian", "Thời vụ", "Thực tập"];
 

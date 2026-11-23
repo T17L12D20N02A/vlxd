@@ -75,7 +75,7 @@ export function SiteFooter() {
             Sản phẩm
           </h3>
           <ul className="mt-4 grid gap-2.5 text-sm">
-            {categories.map((category) => (
+            {categories.slice(0, 5).map((category) => (
               <li key={category.slug}>
                 <Link
                   className="transition hover:text-white"
@@ -85,6 +85,11 @@ export function SiteFooter() {
                 </Link>
               </li>
             ))}
+            <li>
+              <Link className="transition hover:text-white" href="/san-pham">
+                Xem tất cả danh mục
+              </Link>
+            </li>
           </ul>
         </div>
 

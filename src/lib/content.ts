@@ -1,4 +1,6 @@
 import contentData from "@/data/content.json";
+import addedProducts from "@/data/added-products.json";
+import productCategories from "@/data/product-categories.json";
 import type {
   Application,
   Article,
@@ -26,11 +28,14 @@ export const site = {
   tiktok: "https://www.tiktok.com/@vina.khang",
 } as const;
 
-export const products: Product[] = content.products;
+export const products: Product[] = [...content.products, ...addedProducts];
 export const articles: Article[] = content.articles;
 export const applications: Application[] = content.applications;
 export const jobs: Job[] = content.jobs;
-export const categories: Category[] = content.categories;
+export const categories: Category[] = productCategories.map((category) => ({
+  ...category,
+  count: products.filter((product) => product.category === category.slug).length,
+}));
 
 export const categoryMeta: Record<string, { description: string }> = {
   vai: { description: "Vải, tấm chống dính và vải công nghiệp" },

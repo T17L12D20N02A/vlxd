@@ -233,7 +233,7 @@ export default function HomePage() {
             description="Từ vật liệu tấm cuộn đến băng tải gia công theo model máy, đáp ứng nhu cầu gia nhiệt, ép dán và đóng gói."
           />
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
-            {categories.map((category) => {
+            {categories.slice(0, 5).map((category) => {
               const Icon = CATEGORY_ICONS[category.slug] ?? Stack;
               return (
                 <Link

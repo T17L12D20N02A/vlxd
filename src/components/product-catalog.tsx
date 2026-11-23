@@ -157,7 +157,7 @@ export function ProductCatalog({ products, categories }: ProductCatalogProps) {
             Không tìm thấy sản phẩm phù hợp.
           </p>
           <p className="mt-2 text-sm text-muted">
-            Thử đổi từ khóa khác hoặc xem toàn bộ danh mục vật tư Teflon của Vina Khang.
+            Thử đổi từ khóa khác hoặc xem toàn bộ danh mục vật tư công nghiệp của Vina Khang.
           </p>
           <button type="button" onClick={handleClear} className="btn btn-brand btn-sm mt-5">
             Xem tất cả sản phẩm

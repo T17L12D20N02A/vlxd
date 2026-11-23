@@ -5,6 +5,7 @@ import {
   jobs as staticJobs,
   products as staticProducts,
 } from "./content";
+import productCategories from "@/data/product-categories.json";
 import { dbQuery, hasDatabase, resetCmsToSeed } from "./db";
 import type {
   Application,
@@ -18,13 +19,7 @@ import type {
   Spec,
 } from "./types";
 
-export const CATEGORY_OPTIONS: Array<{ slug: string; label: string }> = [
-  { slug: "vai", label: "Vải Teflon chịu nhiệt" },
-  { slug: "bangkeo", label: "Băng keo chịu nhiệt" },
-  { slug: "epkeo", label: "Băng tải máy ép keo" },
-  { slug: "bangtai", label: "Băng tải Teflon" },
-  { slug: "daydai", label: "Dây đai hàn nhiệt" },
-];
+export const CATEGORY_OPTIONS: Array<{ slug: string; label: string }> = productCategories;
 
 export function categoryLabelFor(slug: string): string {
   return CATEGORY_OPTIONS.find((c) => c.slug === slug)?.label ?? slug;

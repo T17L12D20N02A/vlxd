@@ -11,7 +11,7 @@ import { site } from "@/lib/content";
 export const metadata: Metadata = {
   title: "Sản phẩm",
   description:
-    "Danh mục vật liệu Teflon chịu nhiệt của Vina Khang: vải Teflon, băng keo chịu nhiệt, băng tải máy ép keo, băng tải lưới và dây đai hàn nhiệt.",
+    "Danh mục vật tư công nghiệp của Vina Khang: Teflon, cao su, silicone, nhựa kỹ thuật và vật liệu chịu nhiệt.",
 };
 
 async function LiveCatalog() {
@@ -27,8 +27,8 @@ export default function ProductsPage() {
   return (
     <>
       <PageHero
-        title="Danh mục sản phẩm Teflon chịu nhiệt"
-        description="Vật liệu PTFE phủ sợi thủy tinh sẵn quy cách tiêu chuẩn và nhận gia công cắt khổ, nối băng theo kích thước từng model máy."
+        title="Danh mục vật tư công nghiệp"
+        description="Khám phá vật liệu Teflon, cao su, silicone, nhựa kỹ thuật và các sản phẩm công nghiệp theo quy cách."
         crumbs={[{ href: "/", label: "Trang chủ" }, { label: "Sản phẩm" }]}
       />
 

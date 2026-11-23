@@ -4,9 +4,11 @@ Website giới thiệu sản phẩm công nghiệp, giỏ yêu cầu báo giá, 
 
 ## Công nghệ sử dụng
 - **Frontend & Backend**: Next.js 16 (App Router, Turbopack, Cache Components, Standalone output), React 19, TypeScript, Tailwind CSS v4.
-- **Database**: PostgreSQL 16 (`pg` driver, tự động khởi tạo schema và seed dữ liệu gốc từ `src/data/content.json`). Có fallback lưu JSON nội bộ khi chạy local không cấu hình `DATABASE_URL`.
+- **Database**: PostgreSQL 16 (`pg` driver, tự động khởi tạo schema và seed dữ liệu từ `src/data/content.json` và `src/data/added-products.json`). Có fallback lưu JSON nội bộ khi chạy local không cấu hình `DATABASE_URL`.
 - **Kiểm thử**: Vitest (unit test) + Playwright (E2E trên Chromium).
 - **Triển khai**: Docker & Docker Compose (`postgres:16-alpine` + `node:22-alpine`).
+
+Danh mục dùng chung cho website và CMS được lưu trong `src/data/product-categories.json`; ảnh sản phẩm bổ sung nằm trong `public/images/products/imported`. Khi chạy với cơ sở dữ liệu đã có, đợt sản phẩm bổ sung được nhập một lần, không ghi đè các slug đã tồn tại. Thông số của các sản phẩm bổ sung là thông tin tham khảo, cần xác nhận trước khi báo giá.
 
 ## Chạy nhanh bằng Docker (khuyến nghị cho Demo / Production)
 

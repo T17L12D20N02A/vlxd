@@ -1,8 +1,10 @@
-import { Pool, type QueryResult, type QueryResultRow } from "pg";
+import { Pool, type PoolClient, type QueryResult, type QueryResultRow } from "pg";
 import contentData from "@/data/content.json";
-import type { Content } from "./types";
+import addedProducts from "@/data/added-products.json";
+import type { Content, Product } from "./types";
 
 const seed = contentData as Content;
+const catalogImportKey = "catalog-expansion-2026-11";
 
 const globalForDb = globalThis as unknown as {
   __vkPool?: Pool;
@@ -129,40 +131,44 @@ CREATE INDEX IF NOT EXISTS idx_contact_messages_created_at
   ON contact_messages (created_at DESC);
 `;
 
+async function insertSeedProduct(client: PoolClient, p: Product, sortOrder: number): Promise<void> {
+  const catLabel =
+    p.categoryLabel ||
+    seed.categories.find((c) => c.slug === p.category)?.label ||
+    p.category ||
+    "Vật tư Teflon";
+  await client.query(
+    `INSERT INTO cms_products (
+      slug, name, category, category_label, english_name, lead,
+      mini_specs, images, description, specs, applications, featured, status, sort_order
+    ) VALUES ($1,$2,$3,$4,$5,$6,$7::jsonb,$8::jsonb,$9::jsonb,$10::jsonb,$11::jsonb,$12,'show',$13)
+    ON CONFLICT (slug) DO NOTHING`,
+    [
+      p.slug,
+      p.name || p.slug,
+      p.category || "vai",
+      catLabel,
+      p.englishName || "",
+      p.lead || "",
+      JSON.stringify(p.miniSpecs ?? []),
+      JSON.stringify(p.images ?? []),
+      JSON.stringify(p.description ?? []),
+      JSON.stringify(p.specs ?? []),
+      JSON.stringify(p.applications ?? []),
+      Boolean(p.featured),
+      sortOrder,
+    ]
+  );
+}
+
 async function seedCmsTables(pool: Pool): Promise<void> {
   const client = await pool.connect();
   try {
     await client.query("BEGIN");
 
-    for (let i = 0; i < seed.products.length; i += 1) {
-      const p = seed.products[i];
-      const catLabel =
-        p.categoryLabel ||
-        seed.categories.find((c) => c.slug === p.category)?.label ||
-        p.category ||
-        "Vật tư Teflon";
-      await client.query(
-        `INSERT INTO cms_products (
-          slug, name, category, category_label, english_name, lead,
-          mini_specs, images, description, specs, applications, featured, status, sort_order
-        ) VALUES ($1,$2,$3,$4,$5,$6,$7::jsonb,$8::jsonb,$9::jsonb,$10::jsonb,$11::jsonb,$12,'show',$13)
-        ON CONFLICT (slug) DO NOTHING`,
-        [
-          p.slug,
-          p.name || p.slug,
-          p.category || "vai",
-          catLabel,
-          p.englishName || "",
-          p.lead || "",
-          JSON.stringify(p.miniSpecs ?? []),
-          JSON.stringify(p.images ?? []),
-          JSON.stringify(p.description ?? []),
-          JSON.stringify(p.specs ?? []),
-          JSON.stringify(p.applications ?? []),
-          Boolean(p.featured),
-          i,
-        ]
-      );
+    const products = [...seed.products, ...addedProducts];
+    for (let i = 0; i < products.length; i += 1) {
+      await insertSeedProduct(client, products[i], i);
     }
 
     const APP_TAGS: Record<string, string> = {
@@ -260,6 +266,35 @@ async function seedCmsTables(pool: Pool): Promise<void> {
       ]
     );
 
+    await client.query(
+      `INSERT INTO cms_settings (key, value) VALUES ($1, '{}'::jsonb)
+       ON CONFLICT (key) DO NOTHING`,
+      [catalogImportKey]
+    );
+
+    await client.query("COMMIT");
+  } catch (error) {
+    await client.query("ROLLBACK");
+    throw error;
+  } finally {
+    client.release();
+  }
+}
+
+async function importAddedProducts(pool: Pool): Promise<void> {
+  const client = await pool.connect();
+  try {
+    await client.query("BEGIN");
+    const marker = await client.query(
+      `INSERT INTO cms_settings (key, value) VALUES ($1, '{}'::jsonb)
+       ON CONFLICT (key) DO NOTHING RETURNING key`,
+      [catalogImportKey]
+    );
+    if (marker.rowCount) {
+      for (let i = 0; i < addedProducts.length; i += 1) {
+        await insertSeedProduct(client, addedProducts[i], seed.products.length + i);
+      }
+    }
     await client.query("COMMIT");
   } catch (error) {
     await client.query("ROLLBACK");
@@ -281,6 +316,7 @@ export async function ensureSchema(): Promise<void> {
       if (Number(rows[0]?.count ?? 0) === 0) {
         await seedCmsTables(pool);
       }
+      await importAddedProducts(pool);
     })().catch((error) => {
       globalForDb.__vkInitPromise = undefined;
       throw error;
