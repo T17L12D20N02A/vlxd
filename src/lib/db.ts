@@ -11,20 +11,48 @@ const globalForDb = globalThis as unknown as {
   __vkInitPromise?: Promise<void>;
 };
 
+function resolveDatabaseUrl(): string {
+  return (
+    process.env.DATABASE_URL?.trim() ||
+    process.env.POSTGRES_URL?.trim() ||
+    process.env.POSTGRES_PRISMA_URL?.trim() ||
+    process.env.POSTGRES_URL_NON_POOLING?.trim() ||
+    ""
+  );
+}
+
 export function hasDatabase(): boolean {
-  return Boolean(process.env.DATABASE_URL?.trim());
+  return Boolean(resolveDatabaseUrl());
+}
+
+function shouldUseSsl(connectionString: string): boolean {
+  if (/sslmode=disable/i.test(connectionString)) return false;
+  if (/sslmode=(require|verify-ca|verify-full|prefer)/i.test(connectionString)) {
+    return true;
+  }
+  return !/@(localhost|127\.0\.0\.1|db)(:|\/)/i.test(connectionString);
 }
 
 export function getPool(): Pool {
-  if (!process.env.DATABASE_URL) {
-    throw new Error("DATABASE_URL is not configured");
+  const connectionString = resolveDatabaseUrl();
+  if (!connectionString) {
+    throw new Error("DATABASE_URL / POSTGRES_URL is not configured");
   }
   if (!globalForDb.__vkPool) {
+    const useSsl = shouldUseSsl(connectionString);
+    // Strip sslmode param when passing explicit ssl config so pg doesn't override rejectUnauthorized
+    const sanitized = useSsl
+      ? connectionString.replace(/([?&])sslmode=[^&]+(&?)/i, (_, p1, p2) =>
+          p1 === "?" && p2 ? "?" : p2 ? p1 : ""
+        )
+      : connectionString;
+
     globalForDb.__vkPool = new Pool({
-      connectionString: process.env.DATABASE_URL,
-      max: 10,
+      connectionString: sanitized,
+      ssl: useSsl ? { rejectUnauthorized: false } : undefined,
+      max: process.env.VERCEL ? 5 : 10,
       idleTimeoutMillis: 30_000,
-      connectionTimeoutMillis: 5_000,
+      connectionTimeoutMillis: 10_000,
     });
   }
   return globalForDb.__vkPool;
@@ -129,6 +157,14 @@ CREATE TABLE IF NOT EXISTS contact_messages (
 
 CREATE INDEX IF NOT EXISTS idx_contact_messages_created_at
   ON contact_messages (created_at DESC);
+
+ALTER TABLE cms_products ENABLE ROW LEVEL SECURITY;
+ALTER TABLE cms_applications ENABLE ROW LEVEL SECURITY;
+ALTER TABLE cms_articles ENABLE ROW LEVEL SECURITY;
+ALTER TABLE cms_jobs ENABLE ROW LEVEL SECURITY;
+ALTER TABLE cms_settings ENABLE ROW LEVEL SECURITY;
+ALTER TABLE quote_requests ENABLE ROW LEVEL SECURITY;
+ALTER TABLE contact_messages ENABLE ROW LEVEL SECURITY;
 `;
 
 async function insertSeedProduct(client: PoolClient, p: Product, sortOrder: number): Promise<void> {
