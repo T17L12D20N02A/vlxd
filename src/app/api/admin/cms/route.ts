@@ -2,13 +2,19 @@ import { revalidatePath } from "next/cache";
 import { NextResponse } from "next/server";
 import { isAdmin } from "@/lib/auth";
 import {
+  bulkDeleteCms,
+  bulkUpdateCmsStatus,
   deleteCmsApplication,
   deleteCmsArticle,
   deleteCmsJob,
   deleteCmsProduct,
+  duplicateCmsApplication,
+  duplicateCmsArticle,
+  duplicateCmsJob,
   duplicateCmsProduct,
   exportCmsSnapshot,
   getRecruitmentSettings,
+  importCmsSnapshot,
   listCmsApplications,
   listCmsArticles,
   listCmsJobs,
@@ -24,35 +30,11 @@ import {
   toggleCmsJobStatus,
   toggleCmsProductStatus,
 } from "@/lib/cms-store";
+import { parseLinesToBlocks, todayIsoVN } from "@/lib/cms-utils";
 import { listContacts } from "@/lib/contacts-store";
 import { hasDatabase } from "@/lib/db";
 import { listRequests } from "@/lib/requests-store";
 import type { Block } from "@/lib/types";
-
-function parseLinesToBlocks(text: string): Block[] {
-  const blocks: Block[] = [];
-  const paragraphs = text
-    .split(/\n{2,}/)
-    .map((p) => p.trim())
-    .filter(Boolean);
-
-  for (const part of paragraphs) {
-    if (part.startsWith("## ")) {
-      blocks.push({ type: "h", text: part.slice(3).trim() });
-    } else if (part.split("\n").every((line) => line.trim().startsWith("- "))) {
-      blocks.push({
-        type: "list",
-        items: part
-          .split("\n")
-          .map((line) => line.trim().replace(/^-\s*/, ""))
-          .filter(Boolean),
-      });
-    } else {
-      blocks.push({ type: "p", text: part });
-    }
-  }
-  return blocks;
-}
 
 function revalidateAllPublic() {
   revalidatePath("/");
@@ -74,7 +56,7 @@ export async function GET(request: Request) {
     return new NextResponse(JSON.stringify(snapshot, null, 2), {
       headers: {
         "Content-Type": "application/json; charset=utf-8",
-        "Content-Disposition": `attachment; filename="vinakhang-backup-${new Date().toISOString().slice(0, 10)}.json"`,
+        "Content-Disposition": `attachment; filename="vinakhang-backup-${todayIsoVN()}.json"`,
       },
     });
   }
@@ -122,36 +104,81 @@ export async function POST(request: Request) {
       return NextResponse.json({ ok: true });
     }
 
+    if (entity === "system" && action === "import") {
+      const result = await importCmsSnapshot(payload.snapshot);
+      revalidateAllPublic();
+      return NextResponse.json({
+        ok: true,
+        counts: result.counts,
+        warnings: result.warnings,
+      });
+    }
+
     if (entity === "settings" && action === "save") {
       const saved = await saveRecruitmentSettings({
         intro: String(payload.intro ?? ""),
         email: String(payload.email ?? ""),
+        defaultBenefits:
+          typeof payload.defaultBenefits === "string"
+            ? payload.defaultBenefits
+            : undefined,
       });
       revalidatePath("/tuyen-dung");
       revalidatePath("/quan-tri");
       return NextResponse.json({ ok: true, item: saved });
     }
 
+    if (
+      (entity === "products" ||
+        entity === "applications" ||
+        entity === "articles" ||
+        entity === "jobs") &&
+      (action === "bulk-status" || action === "bulk-delete")
+    ) {
+      const slugs = Array.isArray(payload.slugs)
+        ? payload.slugs.map((s) => String(s))
+        : [];
+      if (action === "bulk-status") {
+        const count = await bulkUpdateCmsStatus(
+          entity,
+          slugs,
+          String(payload.status ?? "show")
+        );
+        revalidateAllPublic();
+        return NextResponse.json({ ok: true, count });
+      }
+      const count = await bulkDeleteCms(entity, slugs);
+      revalidateAllPublic();
+      return NextResponse.json({ ok: true, count });
+    }
+
     if (entity === "products") {
       if (action === "save") {
         const saved = await saveCmsProduct({
-          originalSlug: payload.originalSlug ? String(payload.originalSlug) : undefined,
+          originalSlug: payload.originalSlug
+            ? String(payload.originalSlug)
+            : undefined,
           slug: payload.slug ? String(payload.slug) : undefined,
           name: String(payload.name ?? ""),
           category: String(payload.category ?? "vai"),
+          categoryLabel: payload.categoryLabel
+            ? String(payload.categoryLabel)
+            : undefined,
           englishName: String(payload.englishName ?? ""),
           lead: String(payload.lead ?? ""),
           miniSpecs: Array.isArray(payload.miniSpecs) ? payload.miniSpecs : [],
-          images: Array.isArray(payload.images) ? payload.images : [],
+          images: Array.isArray(payload.images)
+            ? payload.images.map((img) => String(img))
+            : [],
           description: Array.isArray(payload.description)
-            ? payload.description
+            ? payload.description.map((d) => String(d))
             : String(payload.descriptionText ?? "")
                 .split(/\n{2,}/)
                 .map((s) => s.trim())
                 .filter(Boolean),
           specs: Array.isArray(payload.specs) ? payload.specs : [],
           applications: Array.isArray(payload.applications)
-            ? payload.applications
+            ? payload.applications.map((a) => String(a))
             : String(payload.applicationsText ?? "")
                 .split("\n")
                 .map((s) => s.trim())
@@ -186,7 +213,9 @@ export async function POST(request: Request) {
           ? (payload.blocks as Block[])
           : parseLinesToBlocks(String(payload.contentText ?? ""));
         const saved = await saveCmsApplication({
-          originalSlug: payload.originalSlug ? String(payload.originalSlug) : undefined,
+          originalSlug: payload.originalSlug
+            ? String(payload.originalSlug)
+            : undefined,
           slug: payload.slug ? String(payload.slug) : undefined,
           title: String(payload.title ?? ""),
           tag: String(payload.tag ?? ""),
@@ -195,7 +224,7 @@ export async function POST(request: Request) {
           blocks,
           video: String(payload.video ?? ""),
           relatedProducts: Array.isArray(payload.relatedProducts)
-            ? (payload.relatedProducts as string[])
+            ? payload.relatedProducts.map((s) => String(s))
             : [],
           status: payload.status === "hidden" ? "hidden" : "show",
         });
@@ -213,6 +242,11 @@ export async function POST(request: Request) {
         revalidateAllPublic();
         return NextResponse.json({ ok: true, item });
       }
+      if (action === "duplicate") {
+        const item = await duplicateCmsApplication(String(payload.slug ?? ""));
+        revalidateAllPublic();
+        return NextResponse.json({ ok: true, item });
+      }
     }
 
     if (entity === "articles") {
@@ -221,7 +255,9 @@ export async function POST(request: Request) {
           ? (payload.blocks as Block[])
           : parseLinesToBlocks(String(payload.contentText ?? ""));
         const saved = await saveCmsArticle({
-          originalSlug: payload.originalSlug ? String(payload.originalSlug) : undefined,
+          originalSlug: payload.originalSlug
+            ? String(payload.originalSlug)
+            : undefined,
           slug: payload.slug ? String(payload.slug) : undefined,
           title: String(payload.title ?? ""),
           date: String(payload.date ?? ""),
@@ -231,7 +267,7 @@ export async function POST(request: Request) {
           blocks,
           video: String(payload.video ?? ""),
           relatedProducts: Array.isArray(payload.relatedProducts)
-            ? (payload.relatedProducts as string[])
+            ? payload.relatedProducts.map((s) => String(s))
             : [],
           status: payload.status === "hidden" ? "hidden" : "show",
         });
@@ -249,6 +285,11 @@ export async function POST(request: Request) {
         revalidateAllPublic();
         return NextResponse.json({ ok: true, item });
       }
+      if (action === "duplicate") {
+        const item = await duplicateCmsArticle(String(payload.slug ?? ""));
+        revalidateAllPublic();
+        return NextResponse.json({ ok: true, item });
+      }
     }
 
     if (entity === "jobs") {
@@ -257,7 +298,9 @@ export async function POST(request: Request) {
           ? (payload.blocks as Block[])
           : parseLinesToBlocks(String(payload.contentText ?? ""));
         const saved = await saveCmsJob({
-          originalSlug: payload.originalSlug ? String(payload.originalSlug) : undefined,
+          originalSlug: payload.originalSlug
+            ? String(payload.originalSlug)
+            : undefined,
           slug: payload.slug ? String(payload.slug) : undefined,
           title: String(payload.title ?? ""),
           department: String(payload.department ?? ""),
@@ -283,6 +326,11 @@ export async function POST(request: Request) {
       }
       if (action === "toggle") {
         const item = await toggleCmsJobStatus(String(payload.slug ?? ""));
+        revalidateAllPublic();
+        return NextResponse.json({ ok: true, item });
+      }
+      if (action === "duplicate") {
+        const item = await duplicateCmsJob(String(payload.slug ?? ""));
         revalidateAllPublic();
         return NextResponse.json({ ok: true, item });
       }

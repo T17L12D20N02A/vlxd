@@ -16,6 +16,7 @@ import {
   getRecruitmentSettings,
   listCmsJobs,
 } from "@/lib/cms-store";
+import { isJobExpired } from "@/lib/cms-utils";
 import { getJob, jobs, site } from "@/lib/content";
 
 export function generateStaticParams() {
@@ -49,7 +50,7 @@ async function JobDetailBody({
     getRecruitmentSettings(),
   ]);
 
-  if (!job || job.status === "closed") notFound();
+  if (!job || job.status !== "open" || isJobExpired(job.deadline)) notFound();
 
   const hrEmail = settings.email || site.email;
   const otherJobs = allJobs.filter((item) => item.slug !== job.slug).slice(0, 4);

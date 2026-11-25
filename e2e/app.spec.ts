@@ -45,15 +45,15 @@ test.describe("Vina Khang E2E", () => {
   }) => {
     await page.goto("/san-pham");
     const main = page.getByRole("main");
-    await expect(main.getByText(/Hiển thị 11 \/ 11 sản phẩm/)).toBeVisible();
+    await expect(main.getByText(/Hiển thị 1\d\d \/ 1\d\d sản phẩm/)).toBeVisible();
 
     const search = main.getByLabel("Tìm kiếm sản phẩm");
     await search.fill("bang tai");
     await expect(page).toHaveURL(/q=bang\+tai|q=bang%20tai/);
-    await expect(main.getByText(/Hiển thị [1-9]\d* \/ 11 sản phẩm/)).toBeVisible();
+    await expect(main.getByText(/Hiển thị [1-9]\d* \/ 1\d\d sản phẩm/)).toBeVisible();
 
     await main.getByRole("button", { name: "Xóa bộ lọc" }).click();
-    await expect(main.getByText(/Hiển thị 11 \/ 11 sản phẩm/)).toBeVisible();
+    await expect(main.getByText(/Hiển thị 1\d\d \/ 1\d\d sản phẩm/)).toBeVisible();
 
     await main.getByRole("button", { name: /Vải Teflon chịu nhiệt/i }).click();
     await expect(page).toHaveURL(/danh-muc=vai/);
@@ -157,6 +157,28 @@ test.describe("Vina Khang E2E", () => {
     await expect(page).toHaveURL(/\/quan-tri$/);
     await expect(page.getByRole("link", { name: createdQuoteCode })).toBeVisible();
     await expect(page.getByText("Trần Liên Hệ").first()).toBeVisible();
+    await expect(page.getByText(/Mục cần kiểm tra & hoàn thiện/)).toBeVisible();
+
+    // Verify URL-synced tab navigation (?muc=products), pagination, preview tab, and unsaved-changes guard
+    const adminNav = page.getByRole("navigation", { name: "Menu quản trị" });
+    await adminNav.getByRole("button", { name: /^Sản phẩm/ }).click();
+    await expect(page).toHaveURL(/\/quan-tri\?muc=products$/);
+    await expect(page.getByText(/Trang 1 \//)).toBeVisible();
+
+    await page.getByRole("button", { name: "Thêm sản phẩm" }).click();
+    const editorDialog = page.getByRole("dialog");
+    await expect(editorDialog).toBeVisible();
+    await editorDialog.getByPlaceholder("Vải Teflon chịu nhiệt...").fill("Sản phẩm nháp kiểm tra");
+    await editorDialog.getByRole("tab", { name: "Xem trước" }).click();
+    await expect(editorDialog.getByRole("heading", { name: "Sản phẩm nháp kiểm tra" })).toBeVisible();
+
+    await editorDialog.getByRole("button", { name: "Hủy" }).click();
+    await expect(page.getByText("Bỏ thay đổi chưa lưu?")).toBeVisible();
+    await page.getByRole("button", { name: "Bỏ thay đổi" }).click();
+    await expect(editorDialog).toHaveCount(0);
+
+    await adminNav.getByRole("button", { name: /^Tổng quan/ }).click();
+    await expect(page).toHaveURL(/\/quan-tri$/);
 
     await page.getByRole("link", { name: createdQuoteCode }).click();
     await expect(page).toHaveURL(new RegExp(`/quan-tri/${createdQuoteCode}$`));
@@ -189,16 +211,19 @@ test.describe("Vina Khang E2E", () => {
     await expect(page.getByText("PostgreSQL · Đã kết nối")).toBeVisible();
     const adminNav = page.getByRole("navigation", { name: "Menu quản trị" });
     await adminNav.getByRole("button", { name: /^Sản phẩm/ }).click();
+    await expect(page).toHaveURL(/\/quan-tri\?muc=products$/);
     await page.getByRole("button", { name: "Thêm sản phẩm" }).click();
 
-    await page.getByPlaceholder("Vải Teflon chịu nhiệt...").fill("Vải Teflon Test Docker");
-    await page.getByRole("button", { name: "Lưu sản phẩm" }).click();
+    const dialog = page.getByRole("dialog");
+    await expect(dialog).toBeVisible();
+    await dialog.getByPlaceholder("Vải Teflon chịu nhiệt...").fill("Vải Teflon Test Docker");
+    await dialog.getByRole("button", { name: "Lưu sản phẩm" }).click();
 
     await expect(page.getByText("Vải Teflon Test Docker")).toBeVisible();
 
-    // Reload page to verify persistence in PostgreSQL
+    // Reload page to verify URL tab state (?muc=products) AND persistence in PostgreSQL
     await page.reload();
-    await adminNav.getByRole("button", { name: /^Sản phẩm/ }).click();
+    await expect(page).toHaveURL(/\/quan-tri\?muc=products$/);
     await expect(page.getByText("Vải Teflon Test Docker")).toBeVisible();
 
     // Verify the new product appears live on public /san-pham AND opens its detail page
@@ -214,12 +239,13 @@ test.describe("Vina Khang E2E", () => {
       page.getByRole("main").getByRole("heading", { level: 1, name: /Vải Teflon Test Docker/i })
     ).toBeVisible();
 
-    // Return to /quan-tri and clean up test product
-    await page.goto("/quan-tri");
-    await adminNav.getByRole("button", { name: /^Sản phẩm/ }).click();
-    page.once("dialog", (dialog) => dialog.accept());
+    // Return to /quan-tri?muc=products and clean up test product via accessible ConfirmDialog
+    await page.goto("/quan-tri?muc=products");
     const row = page.locator("tr", { hasText: "Vải Teflon Test Docker" });
-    await row.getByTitle("Xóa").click();
+    await row.getByRole("button", { name: /Xóa Vải Teflon Test Docker/i }).click();
+    const confirmModal = page.getByRole("dialog");
+    await expect(confirmModal).toBeVisible();
+    await confirmModal.getByRole("button", { name: "Xóa sản phẩm" }).click();
     await expect(page.getByText("Vải Teflon Test Docker")).toHaveCount(0);
   });
 

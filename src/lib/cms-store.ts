@@ -6,7 +6,25 @@ import {
   products as staticProducts,
 } from "./content";
 import productCategories from "@/data/product-categories.json";
-import { dbQuery, hasDatabase, resetCmsToSeed } from "./db";
+import {
+  DEFAULT_JOB_BENEFITS,
+  DEFAULT_PRODUCT_IMAGE,
+  isJobExpired,
+  nextCopySlug,
+  normalizeDeadlineIso,
+  resolveTargetSlug,
+  sanitizeBlocks,
+  sanitizeImageUrl,
+  sanitizeMiniSpecs,
+  sanitizePlainText,
+  sanitizeSafeUrl,
+  sanitizeSpecs,
+  slugify,
+  todayDisplayVN,
+  validateAndNormalizeSnapshot,
+  type SnapshotValidationResult,
+} from "./cms-utils";
+import { dbQuery, ensureSchema, getPool, hasDatabase, resetCmsToSeed } from "./db";
 import type {
   Application,
   Article,
@@ -19,21 +37,13 @@ import type {
   Spec,
 } from "./types";
 
-export const CATEGORY_OPTIONS: Array<{ slug: string; label: string }> = productCategories;
+export { slugify };
+
+export const CATEGORY_OPTIONS: Array<{ slug: string; label: string }> =
+  productCategories;
 
 export function categoryLabelFor(slug: string): string {
   return CATEGORY_OPTIONS.find((c) => c.slug === slug)?.label ?? slug;
-}
-
-export function slugify(input: string): string {
-  return input
-    .normalize("NFD")
-    .replace(/[\u0300-\u036f]/g, "")
-    .replace(/đ/g, "d")
-    .replace(/Đ/g, "D")
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g, "-")
-    .replace(/^-+|-+$/g, "");
 }
 
 export type CmsProduct = Product & {
@@ -68,12 +78,16 @@ export type CmsJob = Job & {
 export type RecruitmentSettings = {
   intro: string;
   email: string;
+  defaultBenefits?: string;
 };
+
+export { DEFAULT_JOB_BENEFITS };
 
 const DEFAULT_RECRUITMENT: RecruitmentSettings = {
   intro:
     "Đồng hành cùng đội ngũ cung ứng vật tư công nghiệp ổn định cho hơn 5000 khách hàng trên toàn quốc.",
   email: "vinakhangtrade@gmail.com",
+  defaultBenefits: DEFAULT_JOB_BENEFITS,
 };
 
 type ProductRow = {
@@ -151,7 +165,7 @@ function mapProduct(row: ProductRow): CmsProduct {
     images:
       Array.isArray(row.images) && row.images.length > 0
         ? row.images
-        : ["/images/products/vai-chiu-nhiet-cao-cap.webp"],
+        : [DEFAULT_PRODUCT_IMAGE],
     description: Array.isArray(row.description) ? row.description : [],
     specs: Array.isArray(row.specs) ? row.specs : [],
     applications: Array.isArray(row.applications) ? row.applications : [],
@@ -166,7 +180,7 @@ function mapApplication(row: ApplicationRow): CmsApplication {
     slug: row.slug,
     title: row.title,
     tag: row.tag,
-    image: row.image || "/images/products/vai-chiu-nhiet-cao-cap.webp",
+    image: row.image || DEFAULT_PRODUCT_IMAGE,
     excerpt: row.excerpt,
     blocks: Array.isArray(row.blocks) ? row.blocks : [],
     video: row.video || "",
@@ -184,7 +198,7 @@ function mapArticle(row: ArticleRow): CmsArticle {
     title: row.title,
     date: row.date,
     author: row.author || "Vina Khang",
-    image: row.image || "/images/products/vai-chiu-nhiet-cao-cap.webp",
+    image: row.image || DEFAULT_PRODUCT_IMAGE,
     excerpt: row.excerpt,
     blocks: Array.isArray(row.blocks) ? row.blocks : [],
     video: row.video || "",
@@ -216,7 +230,9 @@ function mapJob(row: JobRow): CmsJob {
 
 /* ---------- READS ---------- */
 
-export async function listCmsProducts(includeHidden = false): Promise<CmsProduct[]> {
+export async function listCmsProducts(
+  includeHidden = false
+): Promise<CmsProduct[]> {
   if (!hasDatabase()) {
     return staticProducts.map((p) => ({
       ...p,
@@ -248,11 +264,26 @@ export async function getCmsProduct(slug: string): Promise<CmsProduct | null> {
 export async function listCmsCategories(): Promise<Category[]> {
   if (!hasDatabase()) return staticCategories;
   const items = await listCmsProducts(false);
-  return CATEGORY_OPTIONS.map((cat) => ({
-    slug: cat.slug,
-    label: cat.label,
-    count: items.filter((p) => p.category === cat.slug).length,
-  }));
+  const known = new Set(CATEGORY_OPTIONS.map((c) => c.slug));
+  const extraCategories: Category[] = [];
+  for (const item of items) {
+    if (!known.has(item.category)) {
+      known.add(item.category);
+      extraCategories.push({
+        slug: item.category,
+        label: item.categoryLabel || item.category,
+        count: items.filter((p) => p.category === item.category).length,
+      });
+    }
+  }
+  return [
+    ...CATEGORY_OPTIONS.map((cat) => ({
+      slug: cat.slug,
+      label: cat.label,
+      count: items.filter((p) => p.category === cat.slug).length,
+    })),
+    ...extraCategories,
+  ];
 }
 
 const STATIC_APP_TAGS: Record<string, string> = {
@@ -272,7 +303,10 @@ export async function listCmsApplications(
   if (!hasDatabase()) {
     return staticApplications.map((a) => ({
       ...a,
-      tag: STATIC_APP_TAGS[a.slug] || a.title.split("–")[0]?.trim() || "Công nghiệp",
+      tag:
+        STATIC_APP_TAGS[a.slug] ||
+        a.title.split("–")[0]?.trim() ||
+        "Công nghiệp",
       video: "",
       status: "show",
       updatedAt: "2026-11-14T10:00:00.000Z",
@@ -363,7 +397,9 @@ export async function listCmsJobs(includeAll = false): Promise<CmsJob[]> {
   const { rows } = await dbQuery<JobRow>(
     `SELECT * FROM cms_jobs ${where} ORDER BY sort_order ASC, updated_at DESC`
   );
-  return rows.map(mapJob);
+  const mapped = rows.map(mapJob);
+  if (includeAll) return mapped;
+  return mapped.filter((job) => !isJobExpired(job.deadline));
 }
 
 export async function getCmsJob(slug: string): Promise<CmsJob | null> {
@@ -395,7 +431,12 @@ export async function getRecruitmentSettings(): Promise<RecruitmentSettings> {
     "SELECT value FROM cms_settings WHERE key = 'recruitment'"
   );
   return rows[0]?.value
-    ? { ...DEFAULT_RECRUITMENT, ...rows[0].value }
+    ? {
+        ...DEFAULT_RECRUITMENT,
+        ...rows[0].value,
+        defaultBenefits:
+          rows[0].value.defaultBenefits || DEFAULT_JOB_BENEFITS,
+      }
     : DEFAULT_RECRUITMENT;
 }
 
@@ -409,11 +450,81 @@ function requireDb() {
   }
 }
 
+const ENTITY_TABLE = {
+  products: "cms_products",
+  applications: "cms_applications",
+  articles: "cms_articles",
+  jobs: "cms_jobs",
+} as const;
+
+type CmsEntityKey = keyof typeof ENTITY_TABLE;
+
+async function assertSlugAvailable(
+  entity: CmsEntityKey,
+  targetSlug: string,
+  originalSlug?: string
+): Promise<void> {
+  if (originalSlug && originalSlug === targetSlug) return;
+  const table = ENTITY_TABLE[entity];
+  const { rows } = await dbQuery<{ slug: string }>(
+    `SELECT slug FROM ${table} WHERE slug = $1 LIMIT 1`,
+    [targetSlug]
+  );
+  if (rows.length > 0) {
+    throw new Error(
+      `Đường dẫn (slug) "${targetSlug}" đã tồn tại. Vui lòng nhập đường dẫn khác.`
+    );
+  }
+}
+
+async function listExistingSlugs(entity: CmsEntityKey): Promise<string[]> {
+  const table = ENTITY_TABLE[entity];
+  const { rows } = await dbQuery<{ slug: string }>(`SELECT slug FROM ${table}`);
+  return rows.map((r) => r.slug);
+}
+
+/**
+ * Replaces `oldSlug` with `newSlug` (or removes `oldSlug` when `newSlug` is null)
+ * across `related_products` JSONB arrays in `cms_applications` and `cms_articles`.
+ */
+async function syncRelatedProductReferences(
+  oldSlug: string,
+  newSlug: string | null
+): Promise<void> {
+  for (const table of ["cms_applications", "cms_articles"] as const) {
+    if (newSlug) {
+      await dbQuery(
+        `UPDATE ${table}
+         SET related_products = (
+           SELECT COALESCE(jsonb_agg(DISTINCT CASE WHEN elem = $1 THEN $2 ELSE elem END), '[]'::jsonb)
+           FROM jsonb_array_elements_text(related_products) AS elem
+         ),
+         updated_at = NOW()
+         WHERE related_products ? $1`,
+        [oldSlug, newSlug]
+      );
+    } else {
+      await dbQuery(
+        `UPDATE ${table}
+         SET related_products = (
+           SELECT COALESCE(jsonb_agg(elem), '[]'::jsonb)
+           FROM jsonb_array_elements_text(related_products) AS elem
+           WHERE elem <> $1
+         ),
+         updated_at = NOW()
+         WHERE related_products ? $1`,
+        [oldSlug]
+      );
+    }
+  }
+}
+
 export async function saveCmsProduct(input: {
   originalSlug?: string;
   slug?: string;
   name: string;
   category: string;
+  categoryLabel?: string;
   englishName?: string;
   lead?: string;
   miniSpecs?: MiniSpec[];
@@ -425,19 +536,33 @@ export async function saveCmsProduct(input: {
   status?: "show" | "hidden";
 }): Promise<CmsProduct> {
   requireDb();
-  const slug = slugify(input.slug?.trim() || input.name);
+  const cleanName = sanitizePlainText(input.name);
+  if (!cleanName) throw new Error("Vui lòng nhập tên sản phẩm.");
+
+  const slug = resolveTargetSlug({
+    originalSlug: input.originalSlug,
+    slug: input.slug,
+    fallbackTitle: cleanName,
+  });
   if (!slug) throw new Error("Tên hoặc slug sản phẩm không hợp lệ.");
 
-  const categoryLabel = categoryLabelFor(input.category);
+  await assertSlugAvailable("products", slug, input.originalSlug);
+
+  const category = slugify(input.category || "vai") || "vai";
+  const categoryLabel =
+    sanitizePlainText(input.categoryLabel) || categoryLabelFor(category);
+
+  const cleanedImages = (input.images ?? [])
+    .map((img) => sanitizeImageUrl(img))
+    .filter(Boolean);
   const images =
-    input.images && input.images.length > 0
-      ? input.images
-      : ["/images/products/vai-chiu-nhiet-cao-cap.webp"];
+    cleanedImages.length > 0 ? cleanedImages : [DEFAULT_PRODUCT_IMAGE];
 
   if (input.originalSlug && input.originalSlug !== slug) {
     await dbQuery("DELETE FROM cms_products WHERE slug = $1", [
       input.originalSlug,
     ]);
+    await syncRelatedProductReferences(input.originalSlug, slug);
   }
 
   const { rows } = await dbQuery<ProductRow>(
@@ -462,16 +587,20 @@ export async function saveCmsProduct(input: {
     RETURNING *`,
     [
       slug,
-      input.name.trim(),
-      input.category,
+      cleanName,
+      category,
       categoryLabel,
-      (input.englishName ?? "").trim(),
-      (input.lead ?? "").trim(),
-      JSON.stringify(input.miniSpecs ?? []),
+      sanitizePlainText(input.englishName),
+      sanitizePlainText(input.lead),
+      JSON.stringify(sanitizeMiniSpecs(input.miniSpecs)),
       JSON.stringify(images),
-      JSON.stringify(input.description ?? []),
-      JSON.stringify(input.specs ?? []),
-      JSON.stringify(input.applications ?? []),
+      JSON.stringify(
+        (input.description ?? []).map((d) => sanitizePlainText(d)).filter(Boolean)
+      ),
+      JSON.stringify(sanitizeSpecs(input.specs)),
+      JSON.stringify(
+        (input.applications ?? []).map((a) => sanitizePlainText(a)).filter(Boolean)
+      ),
       Boolean(input.featured),
       input.status === "hidden" ? "hidden" : "show",
     ]
@@ -482,9 +611,12 @@ export async function saveCmsProduct(input: {
 export async function deleteCmsProduct(slug: string): Promise<void> {
   requireDb();
   await dbQuery("DELETE FROM cms_products WHERE slug = $1", [slug]);
+  await syncRelatedProductReferences(slug, null);
 }
 
-export async function toggleCmsProductStatus(slug: string): Promise<CmsProduct | null> {
+export async function toggleCmsProductStatus(
+  slug: string
+): Promise<CmsProduct | null> {
   requireDb();
   const { rows } = await dbQuery<ProductRow>(
     `UPDATE cms_products
@@ -497,15 +629,19 @@ export async function toggleCmsProductStatus(slug: string): Promise<CmsProduct |
   return rows[0] ? mapProduct(rows[0]) : null;
 }
 
-export async function duplicateCmsProduct(slug: string): Promise<CmsProduct | null> {
+export async function duplicateCmsProduct(
+  slug: string
+): Promise<CmsProduct | null> {
   requireDb();
   const current = await getCmsProduct(slug);
   if (!current) return null;
-  const copySlug = `${current.slug}-copy-${Date.now().toString(36).slice(-4)}`;
+  const existing = await listExistingSlugs("products");
+  const copySlug = nextCopySlug(current.slug, existing);
   return saveCmsProduct({
     ...current,
+    originalSlug: undefined,
     slug: copySlug,
-    name: `${current.name} (bản sao)`,
+    name: `${current.name.replace(/\s*\(bản sao(?:\s*\d+)?\)$/i, "")} (bản sao)`,
     status: "hidden",
     featured: false,
   });
@@ -524,8 +660,28 @@ export async function saveCmsApplication(input: {
   status?: "show" | "hidden";
 }): Promise<CmsApplication> {
   requireDb();
-  const slug = slugify(input.slug?.trim() || input.title);
+  const cleanTitle = sanitizePlainText(input.title);
+  if (!cleanTitle) throw new Error("Vui lòng nhập tiêu đề bài ứng dụng.");
+
+  const slug = resolveTargetSlug({
+    originalSlug: input.originalSlug,
+    slug: input.slug,
+    fallbackTitle: cleanTitle,
+  });
   if (!slug) throw new Error("Tiêu đề hoặc slug ứng dụng không hợp lệ.");
+
+  await assertSlugAvailable("applications", slug, input.originalSlug);
+
+  const image = sanitizeImageUrl(input.image) || DEFAULT_PRODUCT_IMAGE;
+  const video = sanitizeSafeUrl(input.video);
+  const existingProducts = new Set(await listExistingSlugs("products"));
+  const relatedProducts = Array.from(
+    new Set(
+      (input.relatedProducts ?? [])
+        .map((s) => slugify(String(s)))
+        .filter((s) => s && existingProducts.has(s))
+    )
+  );
 
   if (input.originalSlug && input.originalSlug !== slug) {
     await dbQuery("DELETE FROM cms_applications WHERE slug = $1", [
@@ -550,13 +706,13 @@ export async function saveCmsApplication(input: {
     RETURNING *`,
     [
       slug,
-      input.title.trim(),
-      (input.tag ?? "").trim(),
-      (input.image ?? "").trim() || "/images/products/vai-chiu-nhiet-cao-cap.webp",
-      (input.excerpt ?? "").trim(),
-      JSON.stringify(input.blocks ?? []),
-      (input.video ?? "").trim(),
-      JSON.stringify(input.relatedProducts ?? []),
+      cleanTitle,
+      sanitizePlainText(input.tag) || "Công nghiệp",
+      image,
+      sanitizePlainText(input.excerpt),
+      JSON.stringify(sanitizeBlocks(input.blocks)),
+      video,
+      JSON.stringify(relatedProducts),
       input.status === "hidden" ? "hidden" : "show",
     ]
   );
@@ -583,6 +739,23 @@ export async function toggleCmsApplicationStatus(
   return rows[0] ? mapApplication(rows[0]) : null;
 }
 
+export async function duplicateCmsApplication(
+  slug: string
+): Promise<CmsApplication | null> {
+  requireDb();
+  const current = await getCmsApplication(slug);
+  if (!current) return null;
+  const existing = await listExistingSlugs("applications");
+  const copySlug = nextCopySlug(current.slug, existing);
+  return saveCmsApplication({
+    ...current,
+    originalSlug: undefined,
+    slug: copySlug,
+    title: `${current.title.replace(/\s*\(bản sao(?:\s*\d+)?\)$/i, "")} (bản sao)`,
+    status: "hidden",
+  });
+}
+
 export async function saveCmsArticle(input: {
   originalSlug?: string;
   slug?: string;
@@ -597,8 +770,28 @@ export async function saveCmsArticle(input: {
   status?: "show" | "hidden";
 }): Promise<CmsArticle> {
   requireDb();
-  const slug = slugify(input.slug?.trim() || input.title);
+  const cleanTitle = sanitizePlainText(input.title);
+  if (!cleanTitle) throw new Error("Vui lòng nhập tiêu đề bài viết.");
+
+  const slug = resolveTargetSlug({
+    originalSlug: input.originalSlug,
+    slug: input.slug,
+    fallbackTitle: cleanTitle,
+  });
   if (!slug) throw new Error("Tiêu đề hoặc slug bài viết không hợp lệ.");
+
+  await assertSlugAvailable("articles", slug, input.originalSlug);
+
+  const image = sanitizeImageUrl(input.image) || DEFAULT_PRODUCT_IMAGE;
+  const video = sanitizeSafeUrl(input.video);
+  const existingProducts = new Set(await listExistingSlugs("products"));
+  const relatedProducts = Array.from(
+    new Set(
+      (input.relatedProducts ?? [])
+        .map((s) => slugify(String(s)))
+        .filter((s) => s && existingProducts.has(s))
+    )
+  );
 
   if (input.originalSlug && input.originalSlug !== slug) {
     await dbQuery("DELETE FROM cms_articles WHERE slug = $1", [
@@ -606,7 +799,7 @@ export async function saveCmsArticle(input: {
     ]);
   }
 
-  const today = new Date().toLocaleDateString("vi-VN");
+  const today = todayDisplayVN();
   const { rows } = await dbQuery<ArticleRow>(
     `INSERT INTO cms_articles (
       slug, title, date, author, image, excerpt, blocks, video, related_products, status, updated_at
@@ -625,14 +818,14 @@ export async function saveCmsArticle(input: {
     RETURNING *`,
     [
       slug,
-      input.title.trim(),
-      (input.date ?? "").trim() || today,
-      (input.author ?? "").trim() || "Vina Khang",
-      (input.image ?? "").trim() || "/images/products/vai-chiu-nhiet-cao-cap.webp",
-      (input.excerpt ?? "").trim(),
-      JSON.stringify(input.blocks ?? []),
-      (input.video ?? "").trim(),
-      JSON.stringify(input.relatedProducts ?? []),
+      cleanTitle,
+      sanitizePlainText(input.date) || today,
+      sanitizePlainText(input.author) || "Vina Khang",
+      image,
+      sanitizePlainText(input.excerpt),
+      JSON.stringify(sanitizeBlocks(input.blocks)),
+      video,
+      JSON.stringify(relatedProducts),
       input.status === "hidden" ? "hidden" : "show",
     ]
   );
@@ -659,6 +852,24 @@ export async function toggleCmsArticleStatus(
   return rows[0] ? mapArticle(rows[0]) : null;
 }
 
+export async function duplicateCmsArticle(
+  slug: string
+): Promise<CmsArticle | null> {
+  requireDb();
+  const current = await getCmsArticle(slug);
+  if (!current) return null;
+  const existing = await listExistingSlugs("articles");
+  const copySlug = nextCopySlug(current.slug, existing);
+  return saveCmsArticle({
+    ...current,
+    originalSlug: undefined,
+    slug: copySlug,
+    title: `${current.title.replace(/\s*\(bản sao(?:\s*\d+)?\)$/i, "")} (bản sao)`,
+    date: todayDisplayVN(),
+    status: "hidden",
+  });
+}
+
 export async function saveCmsJob(input: {
   originalSlug?: string;
   slug?: string;
@@ -673,19 +884,33 @@ export async function saveCmsJob(input: {
   status?: "open" | "paused" | "closed";
 }): Promise<CmsJob> {
   requireDb();
-  const slug = slugify(input.slug?.trim() || input.title);
+  const cleanTitle = sanitizePlainText(input.title);
+  if (!cleanTitle) throw new Error("Vui lòng nhập tên vị trí tuyển dụng.");
+
+  const slug = resolveTargetSlug({
+    originalSlug: input.originalSlug,
+    slug: input.slug,
+    fallbackTitle: cleanTitle,
+  });
   if (!slug) throw new Error("Tên hoặc slug vị trí không hợp lệ.");
 
+  await assertSlugAvailable("jobs", slug, input.originalSlug);
+
   const qty = Math.max(1, Number(input.qty) || 1);
-  const jobType = (input.jobType ?? "").trim() || "Toàn thời gian";
-  const location = (input.location ?? "").trim() || "TP. HCM";
-  const salary = (input.salary ?? "").trim() || "Thỏa thuận";
+  const jobType = sanitizePlainText(input.jobType) || "Toàn thời gian";
+  const location = sanitizePlainText(input.location) || "TP. HCM";
+  const salary = sanitizePlainText(input.salary) || "Thỏa thuận";
+  const deadline = normalizeDeadlineIso(input.deadline ?? "");
   const facts: JobFact[] = [
     { label: "Số lượng", value: `${qty} người` },
     { label: "Hình thức", value: jobType },
     { label: "Địa điểm", value: location },
     { label: "Mức lương", value: salary },
   ];
+  if (deadline) {
+    const [y, m, d] = deadline.split("-");
+    facts.push({ label: "Hạn nộp", value: `${d}/${m}/${y}` });
+  }
 
   if (input.originalSlug && input.originalSlug !== slug) {
     await dbQuery("DELETE FROM cms_jobs WHERE slug = $1", [input.originalSlug]);
@@ -715,15 +940,15 @@ export async function saveCmsJob(input: {
     RETURNING *`,
     [
       slug,
-      input.title.trim(),
-      (input.department ?? "").trim() || "Tổng hợp",
+      cleanTitle,
+      sanitizePlainText(input.department) || "Tổng hợp",
       qty,
       jobType,
       location,
       salary,
-      (input.deadline ?? "").trim(),
+      deadline,
       JSON.stringify(facts),
-      JSON.stringify(input.blocks ?? []),
+      JSON.stringify(sanitizeBlocks(input.blocks)),
       status,
     ]
   );
@@ -735,7 +960,9 @@ export async function deleteCmsJob(slug: string): Promise<void> {
   await dbQuery("DELETE FROM cms_jobs WHERE slug = $1", [slug]);
 }
 
-export async function toggleCmsJobStatus(slug: string): Promise<CmsJob | null> {
+export async function toggleCmsJobStatus(
+  slug: string
+): Promise<CmsJob | null> {
   requireDb();
   const { rows } = await dbQuery<JobRow>(
     `UPDATE cms_jobs
@@ -748,13 +975,82 @@ export async function toggleCmsJobStatus(slug: string): Promise<CmsJob | null> {
   return rows[0] ? mapJob(rows[0]) : null;
 }
 
+export async function duplicateCmsJob(slug: string): Promise<CmsJob | null> {
+  requireDb();
+  const current = await getCmsJob(slug);
+  if (!current) return null;
+  const existing = await listExistingSlugs("jobs");
+  const copySlug = nextCopySlug(current.slug, existing);
+  return saveCmsJob({
+    ...current,
+    originalSlug: undefined,
+    slug: copySlug,
+    title: `${current.title.replace(/\s*\(bản sao(?:\s*\d+)?\)$/i, "")} (bản sao)`,
+    status: "paused",
+  });
+}
+
+export async function bulkUpdateCmsStatus(
+  entity: CmsEntityKey,
+  slugs: string[],
+  status: string
+): Promise<number> {
+  requireDb();
+  const cleanSlugs = slugs.map((s) => slugify(s)).filter(Boolean);
+  if (cleanSlugs.length === 0) return 0;
+
+  const table = ENTITY_TABLE[entity];
+  const validStatus =
+    entity === "jobs"
+      ? status === "paused" || status === "closed"
+        ? status
+        : "open"
+      : status === "hidden"
+        ? "hidden"
+        : "show";
+
+  const res = await dbQuery(
+    `UPDATE ${table}
+     SET status = $1, updated_at = NOW()
+     WHERE slug = ANY($2::text[])`,
+    [validStatus, cleanSlugs]
+  );
+  return res.rowCount ?? 0;
+}
+
+export async function bulkDeleteCms(
+  entity: CmsEntityKey,
+  slugs: string[]
+): Promise<number> {
+  requireDb();
+  const cleanSlugs = slugs.map((s) => slugify(s)).filter(Boolean);
+  if (cleanSlugs.length === 0) return 0;
+
+  const table = ENTITY_TABLE[entity];
+  const res = await dbQuery(
+    `DELETE FROM ${table} WHERE slug = ANY($1::text[])`,
+    [cleanSlugs]
+  );
+
+  if (entity === "products") {
+    for (const slug of cleanSlugs) {
+      await syncRelatedProductReferences(slug, null);
+    }
+  }
+  return res.rowCount ?? 0;
+}
+
 export async function saveRecruitmentSettings(
   input: RecruitmentSettings
 ): Promise<RecruitmentSettings> {
   requireDb();
   const value: RecruitmentSettings = {
-    intro: input.intro.trim(),
-    email: input.email.trim(),
+    intro: sanitizePlainText(input.intro),
+    email: sanitizePlainText(input.email),
+    defaultBenefits:
+      typeof input.defaultBenefits === "string"
+        ? sanitizePlainText(input.defaultBenefits)
+        : DEFAULT_JOB_BENEFITS,
   };
   await dbQuery(
     `INSERT INTO cms_settings (key, value, updated_at)
@@ -782,6 +1078,142 @@ export async function exportCmsSnapshot() {
     jobs,
     settings: { recruitment },
   };
+}
+
+/**
+ * Replaces CMS content tables atomically from a validated JSON snapshot
+ * while keeping `quote_requests` and `contact_messages` untouched.
+ */
+export async function importCmsSnapshot(
+  raw: unknown
+): Promise<SnapshotValidationResult> {
+  requireDb();
+  await ensureSchema();
+  const validated = validateAndNormalizeSnapshot(raw);
+  const { snapshot } = validated;
+
+  const pool = getPool();
+  const client = await pool.connect();
+  try {
+    await client.query("BEGIN");
+    await client.query(
+      "TRUNCATE TABLE cms_products, cms_applications, cms_articles, cms_jobs"
+    );
+
+    for (let i = 0; i < snapshot.products.length; i += 1) {
+      const p = snapshot.products[i];
+      await client.query(
+        `INSERT INTO cms_products (
+          slug, name, category, category_label, english_name, lead,
+          mini_specs, images, description, specs, applications, featured, status, sort_order, updated_at
+        ) VALUES ($1,$2,$3,$4,$5,$6,$7::jsonb,$8::jsonb,$9::jsonb,$10::jsonb,$11::jsonb,$12,$13,$14,NOW())`,
+        [
+          p.slug,
+          p.name,
+          p.category,
+          p.categoryLabel,
+          p.englishName,
+          p.lead,
+          JSON.stringify(p.miniSpecs),
+          JSON.stringify(p.images),
+          JSON.stringify(p.description),
+          JSON.stringify(p.specs),
+          JSON.stringify(p.applications),
+          p.featured,
+          p.status,
+          i,
+        ]
+      );
+    }
+
+    for (let i = 0; i < snapshot.applications.length; i += 1) {
+      const a = snapshot.applications[i];
+      await client.query(
+        `INSERT INTO cms_applications (
+          slug, title, tag, image, excerpt, blocks, video, related_products, status, sort_order, updated_at
+        ) VALUES ($1,$2,$3,$4,$5,$6::jsonb,$7,$8::jsonb,$9,$10,NOW())`,
+        [
+          a.slug,
+          a.title,
+          a.tag,
+          a.image,
+          a.excerpt,
+          JSON.stringify(a.blocks),
+          a.video,
+          JSON.stringify(a.relatedProducts),
+          a.status,
+          i,
+        ]
+      );
+    }
+
+    for (let i = 0; i < snapshot.articles.length; i += 1) {
+      const a = snapshot.articles[i];
+      await client.query(
+        `INSERT INTO cms_articles (
+          slug, title, date, author, image, excerpt, blocks, video, related_products, status, sort_order, updated_at
+        ) VALUES ($1,$2,$3,$4,$5,$6,$7::jsonb,$8,$9::jsonb,$10,$11,NOW())`,
+        [
+          a.slug,
+          a.title,
+          a.date,
+          a.author,
+          a.image,
+          a.excerpt,
+          JSON.stringify(a.blocks),
+          a.video,
+          JSON.stringify(a.relatedProducts),
+          a.status,
+          i,
+        ]
+      );
+    }
+
+    for (let i = 0; i < snapshot.jobs.length; i += 1) {
+      const j = snapshot.jobs[i];
+      await client.query(
+        `INSERT INTO cms_jobs (
+          slug, title, department, qty, job_type, location, salary, deadline, facts, blocks, status, sort_order, updated_at
+        ) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9::jsonb,$10::jsonb,$11,$12,NOW())`,
+        [
+          j.slug,
+          j.title,
+          j.department,
+          j.qty,
+          j.jobType,
+          j.location,
+          j.salary,
+          j.deadline,
+          JSON.stringify(j.facts),
+          JSON.stringify(j.blocks),
+          j.status,
+          i,
+        ]
+      );
+    }
+
+    if (snapshot.recruitment) {
+      await client.query(
+        `INSERT INTO cms_settings (key, value, updated_at)
+         VALUES ('recruitment', $1::jsonb, NOW())
+         ON CONFLICT (key) DO UPDATE SET value = EXCLUDED.value, updated_at = NOW()`,
+        [
+          JSON.stringify({
+            ...DEFAULT_RECRUITMENT,
+            ...snapshot.recruitment,
+          }),
+        ]
+      );
+    }
+
+    await client.query("COMMIT");
+    return validated;
+  } catch (error) {
+    await client.query("ROLLBACK");
+    throw error;
+  } finally {
+    client.release();
+  }
 }
 
 export { resetCmsToSeed };
