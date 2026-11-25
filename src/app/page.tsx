@@ -1,5 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
+import { connection } from "next/server";
+import { Suspense } from "react";
 import {
   ArrowRight,
   CalendarCheck,
@@ -16,9 +18,15 @@ import {
   Truck,
   Users,
 } from "@phosphor-icons/react/dist/ssr";
+import { FeaturedProductsBanner } from "@/components/featured-banner";
 import { ProductCard } from "@/components/product-card";
 import { Reveal } from "@/components/reveal";
 import { SectionHeading } from "@/components/section-heading";
+import { getResolvedBannerData } from "@/lib/cms-store";
+import {
+  DEFAULT_BANNER_SETTINGS,
+  resolveBannerProductSlugs,
+} from "@/lib/cms-utils";
 import {
   articles,
   categories,
@@ -77,6 +85,52 @@ const HOME_APPLICATIONS = [
 ]
   .map((slug) => getApplication(slug))
   .filter((application): application is NonNullable<typeof application> => Boolean(application));
+
+const STATIC_BANNER_SLUGS = resolveBannerProductSlugs(undefined, products);
+const STATIC_BANNER_PRODUCTS = STATIC_BANNER_SLUGS.map((s) =>
+  products.find((p) => p.slug === s)
+).filter((p): p is NonNullable<typeof p> => Boolean(p));
+
+async function LiveFeaturedBannerSection() {
+  await connection();
+  const { settings, products: bannerProducts } = await getResolvedBannerData();
+  return (
+    <FeaturedProductsBanner settings={settings} products={bannerProducts} />
+  );
+}
+
+async function LiveFeaturedGridSection() {
+  await connection();
+  const { allVisibleProducts } = await getResolvedBannerData();
+  const liveFeatured = allVisibleProducts.filter((p) => p.featured);
+  const displayList =
+    liveFeatured.length > 0 ? liveFeatured : allVisibleProducts.slice(0, 6);
+
+  return (
+    <section id="san-pham" className="py-16 sm:py-20">
+      <div className="container-page">
+        <SectionHeading
+          title="Sản phẩm nổi bật"
+          description="Vật liệu Teflon PTFE phủ sợi thủy tinh, sẵn quy cách chuẩn và gia công theo yêu cầu."
+          action={
+            <Link
+              href="/san-pham"
+              className="inline-flex items-center gap-1.5 text-sm font-bold text-brand hover:underline"
+            >
+              Xem tất cả {allVisibleProducts.length} sản phẩm
+              <ArrowRight size={15} weight="bold" aria-hidden />
+            </Link>
+          }
+        />
+        <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+          {displayList.map((product) => (
+            <ProductCard key={product.slug} product={product} />
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
 
 export default function HomePage() {
   const featured = featuredProducts();
@@ -171,6 +225,20 @@ export default function HomePage() {
         </div>
       </section>
 
+      <Suspense
+        fallback={
+          <FeaturedProductsBanner
+            settings={{
+              ...DEFAULT_BANNER_SETTINGS,
+              productSlugs: STATIC_BANNER_SLUGS,
+            }}
+            products={STATIC_BANNER_PRODUCTS}
+          />
+        }
+      >
+        <LiveFeaturedBannerSection />
+      </Suspense>
+
       <section id="gioi-thieu" className="py-16 sm:py-20">
         <div className="container-page grid items-center gap-10 lg:grid-cols-2 lg:gap-14">
           <Reveal className="relative">
@@ -260,28 +328,34 @@ export default function HomePage() {
         </div>
       </section>
 
-      <section id="san-pham" className="py-16 sm:py-20">
-        <div className="container-page">
-          <SectionHeading
-            title="Sản phẩm nổi bật"
-            description="Vật liệu Teflon PTFE phủ sợi thủy tinh, sẵn quy cách chuẩn và gia công theo yêu cầu."
-            action={
-              <Link
-                href="/san-pham"
-                className="inline-flex items-center gap-1.5 text-sm font-bold text-brand hover:underline"
-              >
-                Xem tất cả {products.length} sản phẩm
-                <ArrowRight size={15} weight="bold" aria-hidden />
-              </Link>
-            }
-          />
-          <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-            {featured.map((product) => (
-              <ProductCard key={product.slug} product={product} />
-            ))}
-          </div>
-        </div>
-      </section>
+      <Suspense
+        fallback={
+          <section id="san-pham" className="py-16 sm:py-20">
+            <div className="container-page">
+              <SectionHeading
+                title="Sản phẩm nổi bật"
+                description="Vật liệu Teflon PTFE phủ sợi thủy tinh, sẵn quy cách chuẩn và gia công theo yêu cầu."
+                action={
+                  <Link
+                    href="/san-pham"
+                    className="inline-flex items-center gap-1.5 text-sm font-bold text-brand hover:underline"
+                  >
+                    Xem tất cả {products.length} sản phẩm
+                    <ArrowRight size={15} weight="bold" aria-hidden />
+                  </Link>
+                }
+              />
+              <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+                {featured.map((product) => (
+                  <ProductCard key={product.slug} product={product} />
+                ))}
+              </div>
+            </div>
+          </section>
+        }
+      >
+        <LiveFeaturedGridSection />
+      </Suspense>
 
       <section className="bg-brand-dark py-16 text-white sm:py-20">
         <div className="container-page">

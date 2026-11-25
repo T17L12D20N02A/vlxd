@@ -13,6 +13,7 @@ import {
   duplicateCmsJob,
   duplicateCmsProduct,
   exportCmsSnapshot,
+  getBannerSettings,
   getRecruitmentSettings,
   importCmsSnapshot,
   listCmsApplications,
@@ -20,6 +21,7 @@ import {
   listCmsJobs,
   listCmsProducts,
   resetCmsToSeed,
+  saveBannerSettings,
   saveCmsApplication,
   saveCmsArticle,
   saveCmsJob,
@@ -71,6 +73,7 @@ export async function GET(request: Request) {
       listRequests(),
       listContacts(),
     ]);
+  const banner = await getBannerSettings(products);
 
   return NextResponse.json({
     dbMode: hasDatabase() ? "postgres" : "json",
@@ -79,6 +82,7 @@ export async function GET(request: Request) {
     articles,
     jobs,
     recruitment,
+    banner,
     requests,
     contacts,
   });
@@ -112,6 +116,19 @@ export async function POST(request: Request) {
         counts: result.counts,
         warnings: result.warnings,
       });
+    }
+
+    if (entity === "banner" && action === "save") {
+      const saved = await saveBannerSettings({
+        enabled: payload.enabled,
+        title: payload.title,
+        subtitle: payload.subtitle,
+        intervalMs: payload.intervalMs,
+        productSlugs: payload.productSlugs,
+      });
+      revalidatePath("/");
+      revalidatePath("/quan-tri");
+      return NextResponse.json({ ok: true, item: saved });
     }
 
     if (entity === "settings" && action === "save") {

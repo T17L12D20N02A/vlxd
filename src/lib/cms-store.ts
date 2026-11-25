@@ -7,11 +7,13 @@ import {
 } from "./content";
 import productCategories from "@/data/product-categories.json";
 import {
+  DEFAULT_BANNER_SETTINGS,
   DEFAULT_JOB_BENEFITS,
   DEFAULT_PRODUCT_IMAGE,
   isJobExpired,
   nextCopySlug,
   normalizeDeadlineIso,
+  resolveBannerProductSlugs,
   resolveTargetSlug,
   sanitizeBlocks,
   sanitizeImageUrl,
@@ -22,6 +24,8 @@ import {
   slugify,
   todayDisplayVN,
   validateAndNormalizeSnapshot,
+  validateBannerSettingsInput,
+  type BannerSettings,
   type SnapshotValidationResult,
 } from "./cms-utils";
 import { dbQuery, ensureSchema, getPool, hasDatabase, resetCmsToSeed } from "./db";
@@ -82,6 +86,7 @@ export type RecruitmentSettings = {
 };
 
 export { DEFAULT_JOB_BENEFITS };
+export type { BannerSettings };
 
 const DEFAULT_RECRUITMENT: RecruitmentSettings = {
   intro:
@@ -326,12 +331,12 @@ export async function getCmsApplication(
     const found = staticApplications.find((a) => a.slug === slug);
     return found
       ? {
-          ...found,
-          tag: found.title.split("–")[0]?.trim() || "Công nghiệp",
-          video: "",
-          status: "show",
-          updatedAt: "2026-11-14T10:00:00.000Z",
-        }
+        ...found,
+        tag: found.title.split("–")[0]?.trim() || "Công nghiệp",
+        video: "",
+        status: "show",
+        updatedAt: "2026-11-14T10:00:00.000Z",
+      }
       : null;
   }
   const { rows } = await dbQuery<ApplicationRow>(
@@ -365,12 +370,12 @@ export async function getCmsArticle(slug: string): Promise<CmsArticle | null> {
     const found = staticArticles.find((a) => a.slug === slug);
     return found
       ? {
-          ...found,
-          author: "Vina Khang",
-          video: "",
-          status: "show",
-          updatedAt: "2026-11-14T10:00:00.000Z",
-        }
+        ...found,
+        author: "Vina Khang",
+        video: "",
+        status: "show",
+        updatedAt: "2026-11-14T10:00:00.000Z",
+      }
       : null;
   }
   const { rows } = await dbQuery<ArticleRow>(
@@ -407,15 +412,15 @@ export async function getCmsJob(slug: string): Promise<CmsJob | null> {
     const found = staticJobs.find((j) => j.slug === slug);
     return found
       ? {
-          ...found,
-          qty: 1,
-          jobType: "Toàn thời gian",
-          location: "TP. HCM",
-          salary: "Thỏa thuận",
-          deadline: "",
-          status: "open",
-          updatedAt: "2026-11-14T10:00:00.000Z",
-        }
+        ...found,
+        qty: 1,
+        jobType: "Toàn thời gian",
+        location: "TP. HCM",
+        salary: "Thỏa thuận",
+        deadline: "",
+        status: "open",
+        updatedAt: "2026-11-14T10:00:00.000Z",
+      }
       : null;
   }
   const { rows } = await dbQuery<JobRow>(
@@ -432,12 +437,55 @@ export async function getRecruitmentSettings(): Promise<RecruitmentSettings> {
   );
   return rows[0]?.value
     ? {
-        ...DEFAULT_RECRUITMENT,
-        ...rows[0].value,
-        defaultBenefits:
-          rows[0].value.defaultBenefits || DEFAULT_JOB_BENEFITS,
-      }
+      ...DEFAULT_RECRUITMENT,
+      ...rows[0].value,
+      defaultBenefits:
+        rows[0].value.defaultBenefits || DEFAULT_JOB_BENEFITS,
+    }
     : DEFAULT_RECRUITMENT;
+}
+
+export async function getBannerSettings(
+  providedProducts?: CmsProduct[]
+): Promise<BannerSettings> {
+  const products = providedProducts ?? (await listCmsProducts(false));
+  if (!hasDatabase()) {
+    return {
+      ...DEFAULT_BANNER_SETTINGS,
+      productSlugs: resolveBannerProductSlugs(undefined, products),
+    };
+  }
+  const { rows } = await dbQuery<{ value: Partial<BannerSettings> }>(
+    "SELECT value FROM cms_settings WHERE key = 'home_banner'"
+  );
+  const stored = rows[0]?.value;
+  const rawInterval =
+    Number(stored?.intervalMs) || DEFAULT_BANNER_SETTINGS.intervalMs;
+  return {
+    enabled: stored?.enabled === undefined ? true : Boolean(stored.enabled),
+    title: stored?.title?.trim() || DEFAULT_BANNER_SETTINGS.title,
+    subtitle: stored?.subtitle?.trim() || DEFAULT_BANNER_SETTINGS.subtitle,
+    intervalMs: Math.min(10_000, Math.max(2_500, Math.round(rawInterval))),
+    productSlugs: resolveBannerProductSlugs(stored?.productSlugs, products),
+  };
+}
+
+export async function getResolvedBannerData(): Promise<{
+  settings: BannerSettings;
+  products: CmsProduct[];
+  allVisibleProducts: CmsProduct[];
+}> {
+  const visibleProducts = await listCmsProducts(false);
+  const settings = await getBannerSettings(visibleProducts);
+  const bySlug = new Map(visibleProducts.map((p) => [p.slug, p]));
+  const ordered = settings.productSlugs
+    .map((slug) => bySlug.get(slug))
+    .filter((p): p is CmsProduct => Boolean(p));
+  return {
+    settings,
+    products: ordered,
+    allVisibleProducts: visibleProducts,
+  };
 }
 
 /* ---------- WRITES (PostgreSQL) ---------- */
@@ -516,6 +564,26 @@ async function syncRelatedProductReferences(
         [oldSlug]
       );
     }
+  }
+
+  // Also keep `home_banner` productSlugs in sync when a product is renamed or deleted
+  const { rows } = await dbQuery<{ value: Partial<BannerSettings> }>(
+    "SELECT value FROM cms_settings WHERE key = 'home_banner'"
+  );
+  if (rows[0]?.value && Array.isArray(rows[0].value.productSlugs)) {
+    const nextSlugs = newSlug
+      ? Array.from(
+          new Set(
+            rows[0].value.productSlugs.map((s) => (s === oldSlug ? newSlug : s))
+          )
+        )
+      : rows[0].value.productSlugs.filter((s) => s !== oldSlug);
+    await dbQuery(
+      `UPDATE cms_settings
+       SET value = $1::jsonb, updated_at = NOW()
+       WHERE key = 'home_banner'`,
+      [JSON.stringify({ ...rows[0].value, productSlugs: nextSlugs })]
+    );
   }
 }
 
@@ -1061,6 +1129,25 @@ export async function saveRecruitmentSettings(
   return value;
 }
 
+export async function saveBannerSettings(input: {
+  enabled?: unknown;
+  title?: unknown;
+  subtitle?: unknown;
+  intervalMs?: unknown;
+  productSlugs?: unknown;
+}): Promise<BannerSettings> {
+  requireDb();
+  const existingSlugs = new Set(await listExistingSlugs("products"));
+  const validated = validateBannerSettingsInput(input, existingSlugs);
+  await dbQuery(
+    `INSERT INTO cms_settings (key, value, updated_at)
+     VALUES ('home_banner', $1::jsonb, NOW())
+     ON CONFLICT (key) DO UPDATE SET value = EXCLUDED.value, updated_at = NOW()`,
+    [JSON.stringify(validated)]
+  );
+  return validated;
+}
+
 export async function exportCmsSnapshot() {
   const [products, applications, articles, jobs, recruitment] =
     await Promise.all([
@@ -1070,13 +1157,14 @@ export async function exportCmsSnapshot() {
       listCmsJobs(true),
       getRecruitmentSettings(),
     ]);
+  const banner = await getBannerSettings(products);
   return {
     exportedAt: new Date().toISOString(),
     products,
     applications,
     articles,
     jobs,
-    settings: { recruitment },
+    settings: { recruitment, banner },
   };
 }
 
@@ -1203,6 +1291,15 @@ export async function importCmsSnapshot(
             ...snapshot.recruitment,
           }),
         ]
+      );
+    }
+
+    if (snapshot.banner) {
+      await client.query(
+        `INSERT INTO cms_settings (key, value, updated_at)
+         VALUES ('home_banner', $1::jsonb, NOW())
+         ON CONFLICT (key) DO UPDATE SET value = EXCLUDED.value, updated_at = NOW()`,
+        [JSON.stringify(snapshot.banner)]
       );
     }
 

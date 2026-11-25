@@ -12,6 +12,7 @@ test.describe("Vina Khang E2E", () => {
       page.getByRole("heading", { level: 1, name: /Vật liệu Teflon chịu nhiệt/i })
     ).toBeVisible();
     await expect(page.getByText("5 nhóm sản phẩm chính")).toBeVisible();
+    await expect(page.getByText(/Tiêu điểm 01 \//)).toBeVisible();
     await expect(page.getByText("Sản phẩm nổi bật")).toBeVisible();
 
     const brokenImages = await page.evaluate(() =>
@@ -159,8 +160,12 @@ test.describe("Vina Khang E2E", () => {
     await expect(page.getByText("Trần Liên Hệ").first()).toBeVisible();
     await expect(page.getByText(/Mục cần kiểm tra & hoàn thiện/)).toBeVisible();
 
-    // Verify URL-synced tab navigation (?muc=products), pagination, preview tab, and unsaved-changes guard
+    // Verify URL-synced tab navigation (?muc=banner & ?muc=products), pagination, preview tab, and unsaved-changes guard
     const adminNav = page.getByRole("navigation", { name: "Menu quản trị" });
+    await adminNav.getByRole("button", { name: /^Banner nổi bật/ }).click();
+    await expect(page).toHaveURL(/\/quan-tri\?muc=banner$/);
+    await expect(page.getByText(/Đang chọn \d+ \/ 10 sản phẩm trên Banner/)).toBeVisible();
+
     await adminNav.getByRole("button", { name: /^Sản phẩm/ }).click();
     await expect(page).toHaveURL(/\/quan-tri\?muc=products$/);
     await expect(page.getByText(/Trang 1 \//)).toBeVisible();

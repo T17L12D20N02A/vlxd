@@ -5,6 +5,7 @@ import { Suspense } from "react";
 import { AdminCms } from "@/components/admin-cms";
 import { isAdmin } from "@/lib/auth";
 import {
+  getBannerSettings,
   getRecruitmentSettings,
   listCmsApplications,
   listCmsArticles,
@@ -36,6 +37,7 @@ async function DashboardLoader() {
       listRequests(),
       listContacts(),
     ]);
+  const banner = await getBannerSettings(products);
 
   return (
     <AdminCms
@@ -46,6 +48,7 @@ async function DashboardLoader() {
         articles,
         jobs,
         recruitment,
+        banner,
         requests,
         contacts,
       }}

@@ -3,6 +3,7 @@ import {
   isJobExpired,
   nextCopySlug,
   parseLinesToBlocks,
+  resolveBannerProductSlugs,
   resolveTargetSlug,
   sanitizeImageUrl,
   sanitizePlainText,
@@ -10,6 +11,7 @@ import {
   todayDisplayVN,
   todayIsoVN,
   validateAndNormalizeSnapshot,
+  validateBannerSettingsInput,
 } from "./cms-utils";
 
 describe("cms-utils", () => {
@@ -130,5 +132,42 @@ describe("cms-utils", () => {
     expect(res.snapshot.products[1].slug).toBe("sp-1-copy");
     expect(res.snapshot.applications[0].relatedProducts).toEqual(["sp-1"]);
     expect(res.warnings.length).toBeGreaterThanOrEqual(3);
+  });
+
+  it("enforces 5 to 10 products for homepage banner settings and resolves fallback slugs", () => {
+    const catalog = Array.from({ length: 12 }, (_, i) => ({
+      slug: `sp-${i + 1}`,
+      featured: i < 6,
+    }));
+    const validSet = new Set(catalog.map((c) => c.slug));
+
+    // Auto-fills to 8 products when configured list has fewer than 5
+    const fallback = resolveBannerProductSlugs(["sp-2"], catalog);
+    expect(fallback.length).toBe(8);
+    expect(fallback[0]).toBe("sp-2");
+
+    // Rejects < 5 or > 10 on admin save
+    expect(() =>
+      validateBannerSettingsInput({ productSlugs: ["sp-1", "sp-2", "sp-3", "sp-4"] }, validSet)
+    ).toThrow(/5 đến 10/);
+
+    expect(() =>
+      validateBannerSettingsInput(
+        { productSlugs: catalog.slice(0, 11).map((c) => c.slug) },
+        validSet
+      )
+    ).toThrow(/5 đến 10/);
+
+    const saved = validateBannerSettingsInput(
+      {
+        enabled: true,
+        title: "Banner Test <script>x()</script>",
+        intervalMs: 4500,
+        productSlugs: ["sp-5", "sp-4", "sp-3", "sp-2", "sp-1"],
+      },
+      validSet
+    );
+    expect(saved.title).toBe("Banner Test");
+    expect(saved.productSlugs).toEqual(["sp-5", "sp-4", "sp-3", "sp-2", "sp-1"]);
   });
 });

@@ -75,7 +75,26 @@
   }
 }
 
+@keyframes vk-marquee {
+  0% {
+    transform: translate3d(0, 0, 0);
+  }
+  100% {
+    transform: translate3d(-50%, 0, 0);
+  }
+}
+
 @layer components {
+  .vk-marquee-track {
+    display: flex;
+    width: max-content;
+    animation: vk-marquee 34s linear infinite;
+  }
+
+  .vk-marquee-track:hover,
+  .vk-marquee-track:focus-within {
+    animation-play-state: paused;
+  }
   .vk-reveal {
     animation: vk-fade-up 0.45s cubic-bezier(0.16, 1, 0.3, 1) both;
   }

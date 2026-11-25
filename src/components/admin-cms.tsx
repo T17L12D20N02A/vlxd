@@ -25,6 +25,7 @@ import {
   Plus,
   Receipt,
   SignOut,
+  Sparkle,
   SquaresFour,
   Stack,
   Star,
@@ -39,6 +40,7 @@ import {
   JobEditorModal,
   ProductEditorModal,
 } from "@/components/admin/admin-modals";
+import { BannerManagerSection } from "@/components/admin/banner-manager";
 import { StatusBadge } from "@/components/status-badge";
 import CATEGORY_OPTIONS from "@/data/product-categories.json";
 import type {
@@ -54,6 +56,7 @@ import {
   blocksToText,
   isJobExpired,
   validateAndNormalizeSnapshot,
+  type BannerSettings,
   type SnapshotValidationResult,
 } from "@/lib/cms-utils";
 import type { ContactMessage } from "@/lib/contacts-store";
@@ -65,6 +68,7 @@ type TabKey =
   | "dashboard"
   | "requests"
   | "contacts"
+  | "banner"
   | "products"
   | "applications"
   | "articles"
@@ -75,6 +79,7 @@ const VALID_TABS: readonly TabKey[] = [
   "dashboard",
   "requests",
   "contacts",
+  "banner",
   "products",
   "applications",
   "articles",
@@ -100,6 +105,7 @@ export type AdminInitialData = {
   articles: CmsArticle[];
   jobs: CmsJob[];
   recruitment: RecruitmentSettings;
+  banner: BannerSettings;
   requests: StoredRequest[];
   contacts: ContactMessage[];
 };
@@ -244,6 +250,7 @@ export function AdminCms({ initial }: { initial: AdminInitialData }) {
   const [recBenefits, setRecBenefits] = useState(
     initial.recruitment.defaultBenefits || DEFAULT_JOB_BENEFITS
   );
+  const [bannerDraft, setBannerDraft] = useState<BannerSettings>(initial.banner);
 
   const importInputRef = useRef<HTMLInputElement>(null);
 
@@ -252,15 +259,18 @@ export function AdminCms({ initial }: { initial: AdminInitialData }) {
     recEmail !== data.recruitment.email ||
     recBenefits !== (data.recruitment.defaultBenefits || DEFAULT_JOB_BENEFITS);
 
+  const isBannerDirty =
+    JSON.stringify(bannerDraft) !== JSON.stringify(data.banner);
+
   useEffect(() => {
-    if (!isRecruitmentDirty) return;
+    if (!isRecruitmentDirty && !isBannerDirty) return;
     const onBeforeUnload = (event: BeforeUnloadEvent) => {
       event.preventDefault();
       event.returnValue = "";
     };
     window.addEventListener("beforeunload", onBeforeUnload);
     return () => window.removeEventListener("beforeunload", onBeforeUnload);
-  }, [isRecruitmentDirty]);
+  }, [isRecruitmentDirty, isBannerDirty]);
 
   function notify(text: string, kind: "ok" | "err" = "ok") {
     const id = Date.now();
@@ -279,6 +289,7 @@ export function AdminCms({ initial }: { initial: AdminInitialData }) {
     setRecIntro(next.recruitment.intro);
     setRecEmail(next.recruitment.email);
     setRecBenefits(next.recruitment.defaultBenefits || DEFAULT_JOB_BENEFITS);
+    setBannerDraft(next.banner);
   }
 
   async function mutate<TItem = unknown>(
@@ -329,6 +340,21 @@ export function AdminCms({ initial }: { initial: AdminInitialData }) {
 
   function switchTab(next: TabKey) {
     if (next === tab) return;
+    if (tab === "banner" && isBannerDirty) {
+      setConfirmState({
+        title: "Chưa lưu cấu hình Banner",
+        description:
+          "Bạn có thay đổi chưa lưu ở mục Banner sản phẩm nổi bật. Chuyển tab sẽ bỏ các thay đổi này.",
+        confirmLabel: "Chuyển tab",
+        danger: true,
+        run: () => {
+          setBannerDraft(data.banner);
+          setConfirmState(null);
+          applyTabSwitch(next);
+        },
+      });
+      return;
+    }
     if (tab === "jobs" && isRecruitmentDirty) {
       setConfirmState({
         title: "Chưa lưu cài đặt tuyển dụng",
@@ -851,6 +877,13 @@ export function AdminCms({ initial }: { initial: AdminInitialData }) {
       group: "Khách hàng",
       count: data.contacts.length,
       Icon: ChatCircleText,
+    },
+    {
+      key: "banner",
+      label: "Banner nổi bật",
+      group: "Nội dung website",
+      count: data.banner.productSlugs.length,
+      Icon: Sparkle,
     },
     {
       key: "products",
@@ -1477,6 +1510,26 @@ export function AdminCms({ initial }: { initial: AdminInitialData }) {
               </div>
             ) : null}
 
+            {/* BANNER CMS TAB */}
+            {tab === "banner" ? (
+              <BannerManagerSection
+                products={data.products}
+                categories={categoryOptions}
+                draft={bannerDraft}
+                isDirty={isBannerDirty}
+                busy={busy}
+                onChangeDraft={setBannerDraft}
+                onSave={() =>
+                  void mutate(
+                    "banner",
+                    "save",
+                    bannerDraft,
+                    `Đã lưu Banner trang chủ (${bannerDraft.productSlugs.length} sản phẩm).`
+                  )
+                }
+              />
+            ) : null}
+
             {/* PRODUCTS CMS TAB */}
             {tab === "products" ? (
               <div className="space-y-4">
@@ -1488,17 +1541,28 @@ export function AdminCms({ initial }: { initial: AdminInitialData }) {
                     </h1>
                     <p className="text-sm text-muted">
                       {visibleProductsCount} hiển thị · {hiddenProductsCount} ẩn ·{" "}
-                      {featuredProductsCount} nổi bật.
+                      {featuredProductsCount} nổi bật ·{" "}
+                      {data.banner.productSlugs.length}/10 trên Banner.
                     </p>
                   </div>
-                  <button
-                    type="button"
-                    onClick={() => setProductModal("new")}
-                    className="btn btn-primary btn-sm"
-                  >
-                    <Plus size={15} weight="bold" aria-hidden />
-                    Thêm sản phẩm
-                  </button>
+                  <div className="flex flex-wrap items-center gap-2">
+                    <button
+                      type="button"
+                      onClick={() => switchTab("banner")}
+                      className="btn btn-outline btn-sm"
+                    >
+                      <Sparkle size={15} weight="fill" aria-hidden />
+                      Banner trang chủ ({data.banner.productSlugs.length}/10)
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setProductModal("new")}
+                      className="btn btn-primary btn-sm"
+                    >
+                      <Plus size={15} weight="bold" aria-hidden />
+                      Thêm sản phẩm
+                    </button>
+                  </div>
                 </div>
 
                 <div className="card overflow-hidden">
@@ -1693,6 +1757,21 @@ export function AdminCms({ initial }: { initial: AdminInitialData }) {
                                             aria-hidden
                                           />
                                           Nổi bật
+                                        </span>
+                                      ) : null}
+                                      {data.banner.productSlugs.includes(
+                                        p.slug
+                                      ) ? (
+                                        <span
+                                          title="Đang chạy ở Banner đầu trang chủ"
+                                          className="inline-flex items-center gap-0.5 rounded-full bg-[#eaf1fa] px-2 py-0.5 text-[10.5px] font-bold text-brand"
+                                        >
+                                          <Sparkle
+                                            size={11}
+                                            weight="fill"
+                                            aria-hidden
+                                          />
+                                          Banner
                                         </span>
                                       ) : null}
                                     </div>
@@ -2925,16 +3004,16 @@ export function AdminCms({ initial }: { initial: AdminInitialData }) {
             appModal === "new"
               ? null
               : {
-                  slug: appModal.slug,
-                  title: appModal.title,
-                  extraValue: appModal.tag,
-                  image: appModal.image,
-                  excerpt: appModal.excerpt,
-                  contentText: blocksToText(appModal.blocks),
-                  video: appModal.video,
-                  relatedProducts: appModal.relatedProducts,
-                  status: appModal.status,
-                }
+                slug: appModal.slug,
+                title: appModal.title,
+                extraValue: appModal.tag,
+                image: appModal.image,
+                excerpt: appModal.excerpt,
+                contentText: blocksToText(appModal.blocks),
+                video: appModal.video,
+                relatedProducts: appModal.relatedProducts,
+                status: appModal.status,
+              }
           }
           allProducts={data.products}
           mediaLibrary={mediaLibrary}
@@ -2968,17 +3047,17 @@ export function AdminCms({ initial }: { initial: AdminInitialData }) {
             articleModal === "new"
               ? null
               : {
-                  slug: articleModal.slug,
-                  title: articleModal.title,
-                  extraValue: articleModal.date,
-                  author: articleModal.author,
-                  image: articleModal.image,
-                  excerpt: articleModal.excerpt,
-                  contentText: blocksToText(articleModal.blocks),
-                  video: articleModal.video,
-                  relatedProducts: articleModal.relatedProducts,
-                  status: articleModal.status,
-                }
+                slug: articleModal.slug,
+                title: articleModal.title,
+                extraValue: articleModal.date,
+                author: articleModal.author,
+                image: articleModal.image,
+                excerpt: articleModal.excerpt,
+                contentText: blocksToText(articleModal.blocks),
+                video: articleModal.video,
+                relatedProducts: articleModal.relatedProducts,
+                status: articleModal.status,
+              }
           }
           allProducts={data.products}
           mediaLibrary={mediaLibrary}

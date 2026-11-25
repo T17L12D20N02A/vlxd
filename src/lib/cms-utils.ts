@@ -9,6 +9,109 @@ import type {
 export const DEFAULT_PRODUCT_IMAGE =
   "/images/products/vai-chiu-nhiet-cao-cap.webp";
 
+export const BANNER_MIN_PRODUCTS = 5;
+export const BANNER_MAX_PRODUCTS = 10;
+
+export type BannerSettings = {
+  enabled: boolean;
+  title: string;
+  subtitle: string;
+  intervalMs: number;
+  productSlugs: string[];
+};
+
+export const DEFAULT_BANNER_SETTINGS: Omit<BannerSettings, "productSlugs"> = {
+  enabled: true,
+  title: "Tâm điểm sản phẩm công nghiệp nổi bật",
+  subtitle:
+    "Vật tư chịu nhiệt, băng tải PTFE và nhựa kỹ thuật chủ lực — sẵn kho quy cách chuẩn, nhận gia công theo yêu cầu.",
+  intervalMs: 4000,
+};
+
+/**
+ * Resolves a valid 5–10 product slug list when reading banner config,
+ * falling back to featured / visible products if fewer than 5 valid slugs remain.
+ */
+export function resolveBannerProductSlugs(
+  configuredSlugs: unknown,
+  availableProducts: ReadonlyArray<{ slug: string; featured?: boolean }>
+): string[] {
+  const bySlug = new Set(availableProducts.map((p) => p.slug));
+  const picked: string[] = [];
+
+  if (Array.isArray(configuredSlugs)) {
+    for (const raw of configuredSlugs) {
+      const s = slugify(String(raw));
+      if (s && bySlug.has(s) && !picked.includes(s)) {
+        picked.push(s);
+        if (picked.length >= BANNER_MAX_PRODUCTS) break;
+      }
+    }
+  }
+
+  if (picked.length < BANNER_MIN_PRODUCTS) {
+    const targetCount = Math.min(8, availableProducts.length);
+    const candidates = [
+      ...availableProducts.filter((p) => p.featured),
+      ...availableProducts.filter((p) => !p.featured),
+    ];
+    for (const p of candidates) {
+      if (!picked.includes(p.slug)) {
+        picked.push(p.slug);
+        if (picked.length >= targetCount) break;
+      }
+    }
+  }
+
+  return picked.slice(0, BANNER_MAX_PRODUCTS);
+}
+
+/**
+ * Strictly validates admin-submitted BannerSettings (enforcing 5..10 products).
+ */
+export function validateBannerSettingsInput(
+  input: {
+    enabled?: unknown;
+    title?: unknown;
+    subtitle?: unknown;
+    intervalMs?: unknown;
+    productSlugs?: unknown;
+  },
+  existingSlugs: ReadonlySet<string>
+): BannerSettings {
+  const rawSlugs = Array.isArray(input.productSlugs) ? input.productSlugs : [];
+  const productSlugs: string[] = [];
+  for (const item of rawSlugs) {
+    const s = slugify(String(item));
+    if (s && existingSlugs.has(s) && !productSlugs.includes(s)) {
+      productSlugs.push(s);
+    }
+  }
+
+  const minAllowed = Math.min(BANNER_MIN_PRODUCTS, existingSlugs.size);
+  if (
+    productSlugs.length < minAllowed ||
+    productSlugs.length > BANNER_MAX_PRODUCTS
+  ) {
+    throw new Error(
+      `Banner sản phẩm nổi bật cần chọn từ ${BANNER_MIN_PRODUCTS} đến ${BANNER_MAX_PRODUCTS} sản phẩm (hiện đang có ${productSlugs.length} sản phẩm hợp lệ).`
+    );
+  }
+
+  const rawInterval = Number(input.intervalMs) || DEFAULT_BANNER_SETTINGS.intervalMs;
+  const intervalMs = Math.min(10_000, Math.max(2_500, Math.round(rawInterval)));
+
+  return {
+    enabled: input.enabled === undefined ? true : Boolean(input.enabled),
+    title:
+      sanitizePlainText(input.title) || DEFAULT_BANNER_SETTINGS.title,
+    subtitle:
+      sanitizePlainText(input.subtitle) || DEFAULT_BANNER_SETTINGS.subtitle,
+    intervalMs,
+    productSlugs,
+  };
+}
+
 export const DEFAULT_JOB_BENEFITS = [
   "Lương thỏa thuận theo năng lực, xét điều chỉnh định kỳ hằng năm.",
   "Đóng BHXH, BHYT, BHTN đầy đủ theo quy định pháp luật.",
@@ -353,6 +456,7 @@ export type NormalizedSnapshot = {
     email: string;
     defaultBenefits?: string;
   };
+  banner?: BannerSettings;
 };
 
 export type SnapshotValidationResult = {
@@ -642,6 +746,28 @@ export function validateAndNormalizeSnapshot(
     };
   }
 
+  let banner: NormalizedSnapshot["banner"];
+  const bannerRaw =
+    settingsObj?.banner && typeof settingsObj.banner === "object"
+      ? (settingsObj.banner as Record<string, unknown>)
+      : null;
+  if (bannerRaw) {
+    const resolvedSlugs = resolveBannerProductSlugs(
+      bannerRaw.productSlugs,
+      products
+    );
+    const rawInterval =
+      Number(bannerRaw.intervalMs) || DEFAULT_BANNER_SETTINGS.intervalMs;
+    banner = {
+      enabled: bannerRaw.enabled === undefined ? true : Boolean(bannerRaw.enabled),
+      title: sanitizePlainText(bannerRaw.title) || DEFAULT_BANNER_SETTINGS.title,
+      subtitle:
+        sanitizePlainText(bannerRaw.subtitle) || DEFAULT_BANNER_SETTINGS.subtitle,
+      intervalMs: Math.min(10_000, Math.max(2_500, Math.round(rawInterval))),
+      productSlugs: resolvedSlugs,
+    };
+  }
+
   return {
     snapshot: {
       products,
@@ -649,6 +775,7 @@ export function validateAndNormalizeSnapshot(
       articles,
       jobs,
       recruitment,
+      banner,
     },
     warnings,
     counts: {
