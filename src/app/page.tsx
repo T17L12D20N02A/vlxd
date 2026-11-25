@@ -91,11 +91,77 @@ const STATIC_BANNER_PRODUCTS = STATIC_BANNER_SLUGS.map((s) =>
   products.find((p) => p.slug === s)
 ).filter((p): p is NonNullable<typeof p> => Boolean(p));
 
+function ClassicFallbackHero() {
+  return (
+    <section className="relative overflow-hidden bg-brand-dark text-white">
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-0 bg-[radial-gradient(120%_90%_at_88%_-10%,rgba(232,160,32,0.18),transparent_58%)]"
+      />
+      <div className="container-page relative grid items-center gap-12 py-14 lg:grid-cols-[1.12fr_0.88fr] lg:py-20">
+        <Reveal>
+          <p className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/5 px-3.5 py-1.5 text-[12.5px] font-semibold text-[#d8e6f6]">
+            <span className="h-1.5 w-1.5 rounded-full bg-accent" aria-hidden />
+            Công ty TNHH Thương mại Vina Khang
+          </p>
+          <h1 className="mt-5 text-[2.35rem] leading-[1.08] text-white sm:text-[3rem] lg:text-[3.35rem]">
+            Vật liệu Teflon chịu nhiệt{" "}
+            <span className="text-accent">cho sản xuất công nghiệp</span>
+          </h1>
+          <p className="mt-5 max-w-xl text-[16.5px] leading-relaxed text-[#d8e6f6]">
+            Vải Teflon, băng keo, băng tải máy ép keo và dây đai hàn nhiệt, gia
+            công theo kích thước từng model máy.
+          </p>
+          <div className="mt-7 flex flex-wrap gap-3">
+            <Link href="/san-pham" className="btn btn-primary">
+              Xem sản phẩm
+              <ArrowRight size={17} weight="bold" aria-hidden />
+            </Link>
+            <Link href="/bao-gia" className="btn btn-ghost-light">
+              Nhận báo giá
+            </Link>
+          </div>
+        </Reveal>
+
+        <Reveal delay={0.1} className="relative">
+          <div className="overflow-hidden rounded-2xl border border-white/15 bg-white/5">
+            <Image
+              src="/images/products/vai-chiu-nhiet-cao-cap.webp"
+              alt="Cuộn vải Teflon phủ PTFE màu nâu của Vina Khang"
+              width={720}
+              height={540}
+              priority
+              className="aspect-[4/3] w-full object-cover"
+            />
+          </div>
+          <dl className="mt-4 grid grid-cols-2 gap-px overflow-hidden rounded-xl border border-white/15 bg-white/15 text-[13px]">
+            {HERO_SPECS.map((spec) => (
+              <div key={spec.label} className="bg-brand-deep/80 px-4 py-3">
+                <dt className="text-[11.5px] uppercase tracking-wide text-[#9fbcd8]">
+                  {spec.label}
+                </dt>
+                <dd className="mt-0.5 text-[15px] font-bold text-white">
+                  {spec.value}
+                </dd>
+              </div>
+            ))}
+          </dl>
+        </Reveal>
+      </div>
+    </section>
+  );
+}
+
 async function LiveFeaturedBannerSection() {
   await connection();
   const { settings, products: bannerProducts } = await getResolvedBannerData();
   return (
-    <FeaturedProductsBanner settings={settings} products={bannerProducts} />
+    <FeaturedProductsBanner
+      settings={settings}
+      products={bannerProducts}
+      variant="hero"
+      fallbackHero={<ClassicFallbackHero />}
+    />
   );
 }
 
@@ -138,74 +204,22 @@ export default function HomePage() {
 
   return (
     <>
-      <section className="relative overflow-hidden bg-brand-dark text-white">
-        <div
-          aria-hidden
-          className="pointer-events-none absolute inset-0 bg-[radial-gradient(120%_90%_at_88%_-10%,rgba(232,160,32,0.18),transparent_58%)]"
-        />
-        <div className="container-page relative grid items-center gap-12 py-14 lg:grid-cols-[1.12fr_0.88fr] lg:py-20">
-          <Reveal>
-            <p className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/5 px-3.5 py-1.5 text-[12.5px] font-semibold text-[#d8e6f6]">
-              <span className="h-1.5 w-1.5 rounded-full bg-accent" aria-hidden />
-              Công ty TNHH Thương mại Vina Khang
-            </p>
-            <h1 className="mt-5 text-[2.35rem] leading-[1.08] text-white sm:text-[3rem] lg:text-[3.35rem]">
-              Vật liệu Teflon chịu nhiệt{" "}
-              <span className="text-accent">cho sản xuất công nghiệp</span>
-            </h1>
-            <p className="mt-5 max-w-xl text-[16.5px] leading-relaxed text-[#d8e6f6]">
-              Vải Teflon, băng keo, băng tải máy ép keo và dây đai hàn nhiệt,
-              gia công theo kích thước từng model máy.
-            </p>
-            <div className="mt-7 flex flex-wrap gap-3">
-              <Link href="/san-pham" className="btn btn-primary">
-                Xem sản phẩm
-                <ArrowRight size={17} weight="bold" aria-hidden />
-              </Link>
-              <Link href="/bao-gia" className="btn btn-ghost-light">
-                Nhận báo giá
-              </Link>
-            </div>
-            <ul className="mt-8 flex flex-wrap gap-x-6 gap-y-2.5 text-[13.5px] font-medium text-[#cfe0f3]">
-              {[
-                "Giao hàng toàn quốc",
-                "Gia công theo yêu cầu",
-                "Tư vấn kỹ thuật tận tâm",
-              ].map((badge) => (
-                <li key={badge} className="inline-flex items-center gap-2">
-                  <span className="h-2 w-2 rounded-full bg-accent" aria-hidden />
-                  {badge}
-                </li>
-              ))}
-            </ul>
-          </Reveal>
+      <Suspense
+        fallback={
+          <FeaturedProductsBanner
+            settings={{
+              ...DEFAULT_BANNER_SETTINGS,
+              productSlugs: STATIC_BANNER_SLUGS,
+            }}
+            products={STATIC_BANNER_PRODUCTS}
+            variant="hero"
+          />
+        }
+      >
+        <LiveFeaturedBannerSection />
+      </Suspense>
 
-          <Reveal delay={0.1} className="relative">
-            <div className="overflow-hidden rounded-2xl border border-white/15 bg-white/5">
-              <Image
-                src="/images/products/vai-chiu-nhiet-cao-cap.webp"
-                alt="Cuộn vải Teflon phủ PTFE màu nâu của Vina Khang"
-                width={720}
-                height={540}
-                priority
-                className="aspect-[4/3] w-full object-cover"
-              />
-            </div>
-            <dl className="mt-4 grid grid-cols-2 gap-px overflow-hidden rounded-xl border border-white/15 bg-white/15 text-[13px]">
-              {HERO_SPECS.map((spec) => (
-                <div key={spec.label} className="bg-brand-deep/80 px-4 py-3">
-                  <dt className="text-[11.5px] uppercase tracking-wide text-[#9fbcd8]">
-                    {spec.label}
-                  </dt>
-                  <dd className="mt-0.5 text-[15px] font-bold text-white">{spec.value}</dd>
-                </div>
-              ))}
-            </dl>
-          </Reveal>
-        </div>
-      </section>
-
-      <section className="relative z-10 -mt-10">
+      <section className="relative z-10 pt-8 sm:pt-10">
         <div className="container-page">
           <div className="grid grid-cols-2 gap-px overflow-hidden rounded-2xl border border-line bg-line shadow-[0_18px_40px_-28px_rgba(15,27,45,0.35)] lg:grid-cols-4">
             {STATS.map(({ value, label, Icon }) => (
@@ -224,20 +238,6 @@ export default function HomePage() {
           </div>
         </div>
       </section>
-
-      <Suspense
-        fallback={
-          <FeaturedProductsBanner
-            settings={{
-              ...DEFAULT_BANNER_SETTINGS,
-              productSlugs: STATIC_BANNER_SLUGS,
-            }}
-            products={STATIC_BANNER_PRODUCTS}
-          />
-        }
-      >
-        <LiveFeaturedBannerSection />
-      </Suspense>
 
       <section id="gioi-thieu" className="py-16 sm:py-20">
         <div className="container-page grid items-center gap-10 lg:grid-cols-2 lg:gap-14">

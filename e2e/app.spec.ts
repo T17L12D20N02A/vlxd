@@ -8,11 +8,9 @@ test.describe("Vina Khang E2E", () => {
     page.on("pageerror", (error) => errors.push(error.message));
 
     await page.goto("/");
-    await expect(
-      page.getByRole("heading", { level: 1, name: /Vật liệu Teflon chịu nhiệt/i })
-    ).toBeVisible();
-    await expect(page.getByText("5 nhóm sản phẩm chính")).toBeVisible();
+    await expect(page.locator("main h1")).toBeVisible();
     await expect(page.getByText(/Tiêu điểm 01 \//)).toBeVisible();
+    await expect(page.getByText("5 nhóm sản phẩm chính")).toBeVisible();
     await expect(page.getByText("Sản phẩm nổi bật")).toBeVisible();
 
     const brokenImages = await page.evaluate(() =>

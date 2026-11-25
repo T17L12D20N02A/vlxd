@@ -169,13 +169,14 @@ export function BannerManagerSection({
           <p className="mb-2 text-xs font-bold uppercase tracking-wider text-muted">
             Bản xem trước trực tiếp (chưa cần tải lại trang chủ)
           </p>
-          <div className="-mx-4">
+          <div className="mt-2">
             <FeaturedProductsBanner
               settings={{
                 ...draft,
                 enabled: true,
               }}
               products={selectedProducts}
+              variant="preview"
             />
           </div>
         </div>
