@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import { useEffect, useMemo, useRef, useState } from "react";
 import {
   ArrowRight,
@@ -215,9 +215,21 @@ type ConfirmActionState = {
 } | null;
 
 export function AdminCms({ initial }: { initial: AdminInitialData }) {
-  const router = useRouter();
   const searchParams = useSearchParams();
-  const tab = parseTabParam(searchParams.get("muc"));
+  const [tab, setTab] = useState<TabKey>(() =>
+    parseTabParam(searchParams.get("muc"))
+  );
+
+  useEffect(() => {
+    const onPopState = () => {
+      const next = parseTabParam(
+        new URLSearchParams(window.location.search).get("muc")
+      );
+      setTab(next);
+    };
+    window.addEventListener("popstate", onPopState);
+    return () => window.removeEventListener("popstate", onPopState);
+  }, []);
 
   const [data, setData] = useState<AdminInitialData>(initial);
   const [search, setSearch] = useState("");
@@ -328,6 +340,7 @@ export function AdminCms({ initial }: { initial: AdminInitialData }) {
   }
 
   function applyTabSwitch(next: TabKey) {
+    setTab(next);
     setSearch("");
     setCatFilter("");
     setStatusFilter("");
@@ -335,7 +348,9 @@ export function AdminCms({ initial }: { initial: AdminInitialData }) {
     setPage(1);
     setSelectedSlugs([]);
     const href = next === "dashboard" ? "/quan-tri" : `/quan-tri?muc=${next}`;
-    router.replace(href, { scroll: false });
+    if (typeof window !== "undefined") {
+      window.history.pushState(null, "", href);
+    }
   }
 
   function switchTab(next: TabKey) {
@@ -697,7 +712,6 @@ export function AdminCms({ initial }: { initial: AdminInitialData }) {
     }
 
     return items;
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     newQuoteRequestsCount,
     expiredOpenJobs.length,
